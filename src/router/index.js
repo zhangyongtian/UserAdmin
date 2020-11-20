@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import LoginandSign from '@/views/Loginasign.vue'
 import Login from '@/components/login/login.vue'
+import Register from '@/components/signin/signin.vue'
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
@@ -28,7 +29,7 @@ const routes = [
 			{
 				path:"register",
 				name:"register",
-				component:()=>import('@/components/signin/signin.vue')
+				component:Register
 			}
 		]
 	}
