@@ -1,10 +1,17 @@
 <template>
   <div id="app">
-      <router-link to="/"></router-link>
+		<Head></Head>
     <router-view/>
   </div>
 </template>
-
+<script>
+import Head from '@/components/head/Head.vue'
+export default{
+	components:{
+		Head
+	}
+}
+</script>
 <style lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

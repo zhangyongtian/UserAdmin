@@ -15,7 +15,8 @@
 		      default-active="2"
 		      class="el-menu-vertical-demo"
 		      @open="handleOpen"
-		      @close="handleClose">
+		      @close="handleClose"
+					:router="true">
 		      <el-submenu index="1">
 		        <template slot="title">
 		          <i class="el-icon-location"></i>
@@ -28,7 +29,7 @@
 							<el-menu-item index="1-4">留言</el-menu-item>
 							<el-menu-item index="1-5">照片墙</el-menu-item>
 							<el-menu-item index="1-6">关注站长</el-menu-item>
-							<el-menu-item index="1-7">登录注册</el-menu-item>
+							<el-menu-item index="loginandsign">登录注册</el-menu-item>
 		        </el-menu-item-group>
 		      </el-submenu>
 		    </el-menu>

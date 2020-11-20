@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-		<Head></Head>
     <div class="bolg_logo">
 			<img alt="Vue logo" src="@/assets/Homeimgs/homearg.jpg">
 		</div>
@@ -14,13 +13,11 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
-import Head from '@/components/head/Head.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
-		Head
+    HelloWorld
   },
 	data(){
 		return {

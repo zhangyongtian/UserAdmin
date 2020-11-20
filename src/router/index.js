@@ -1,7 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-
+import LoginandSign from '@/views/Loginasign.vue'
+import Login from '@/components/login/login.vue'
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 Vue.use(VueRouter)
 
 const routes = [
@@ -9,7 +14,24 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
-  }
+  },
+	{
+		path:"/loginandsign",
+		name:"loginandsign",
+		component:LoginandSign,
+		children:[
+			{
+				path:"/",
+				name:"login",
+				component:Login
+			},
+			{
+				path:"register",
+				name:"register",
+				component:()=>import('@/components/signin/signin.vue')
+			}
+		]
+	}
 ]
 
 const router = new VueRouter({

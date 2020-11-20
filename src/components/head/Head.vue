@@ -30,13 +30,13 @@
 	  			  </div>
 	  			  <div class="home_content">
 	  			  	  <el-tabs v-model="activeName" @tab-click="handleClick" :stretch="true">
-	  			  	    <el-tab-pane label="首页" name="first"></el-tab-pane>
+	  			  	    <el-tab-pane label="首页" name=""></el-tab-pane>
 	  			  	    <el-tab-pane label="博文" name="second"></el-tab-pane>
 	  			  	    <el-tab-pane label="我的关注" name="third"></el-tab-pane>
 	  			  	    <el-tab-pane label="留言" name="four"></el-tab-pane>
 	  			  	  	<el-tab-pane label="照片墙" name="five"></el-tab-pane>
 	  			  	  	<el-tab-pane label="关于站长" name="six"></el-tab-pane>
-	  			  	  	<el-tab-pane label="登录/注册" name="seven"></el-tab-pane>
+	  			  	  	<el-tab-pane label="登录/注册" name="loginandsign"></el-tab-pane>
 	  			  	  </el-tabs>
 	  			  </div>
 	  		</div>
@@ -49,14 +49,14 @@
   export default {
     data() {
       return {
-        activeName: 'second',
+        activeName: '',
 		drawer: false,
 		direction: 'ltr'
       };
     },
     methods: {
       handleClick(tab, event) {
-        console.log(tab, event);
+        this.$router.push("/"+tab.name);
       }
     },
 	components:{
