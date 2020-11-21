@@ -13,10 +13,10 @@
 				<el-card class="box-card">
 					<el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign"
 					:rules="rules" ref="ruleForm">
-						<el-form-item label="input you username or email" prop="username">
+						<el-form-item label="input you username or email" prop="username" style="text-align: left;">
 							<el-input v-model="formLabelAlign.username" placeholder="输入你的用户名或者邮箱"></el-input>
 						</el-form-item>
-						<el-form-item prop="password" label="input you passworld" style="position: relative;">
+						<el-form-item  prop="password" label="input you passworld" style="position: relative; text-align: left;">
 							<span style="position: absolute;top: -50px;z-index: 9;right: 0px;"><a href="" style="text-decoration: none;">忘记密码？</a></span>
 							<el-input v-model="formLabelAlign.password" placeholder="输入你的密码"></el-input>
 						</el-form-item>

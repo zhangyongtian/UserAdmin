@@ -52,6 +52,7 @@
 
 <script>
 	import {loginrequest} from '@/util/requestaxiosutil/loginreques'
+	import {registerrequest} from '@/util/requestaxiosutil/registerrequest'
 	export default{
 		name:"signin",
 		data(){
@@ -66,21 +67,21 @@
 				},
 				rules:{
 					username:[
-						{ required: true, message: '请输入您的用户名', trigger: 'blur' },
-						{ min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }	
+						{ required: true, message: '请输入您的用户名'},
+						{ min: 3, max: 10, message: '长度在 3 到 10 个字符'}	
 					],
 					email:[
-						{ required: true, message: '请输入您的邮箱', trigger: 'blur' },
-						{ min: 10, max: 30, message: '请输入正确的长度（限制不能超过30个字符，最少不能低于6）', trigger: 'blur' },
-						{ type: 'email', required: true, message: '请输入正确的日期', trigger: 'change' }
+						{ required: true, message: '请输入您的邮箱'},
+						{ min: 10, max: 30, message: '请输入正确的长度（限制不能超过30个字符，最少不能低于6）'},
+						{ type: 'email', required: true, message: '请输入正确的邮箱信息'}
 					],
 					password:[
-						{ required: true, message: '请输入您的密码', trigger: 'blur' },
-						{ min: 6, max: 20, message: '长度在 6到 20 个字符', trigger: 'blur' }
+						{ required: true, message: '请输入您的密码'},
+						{ min: 6, max: 20, message: '长度在 6到 20 个字符', }
 					],
 					verification:[
-						{ required: true, message: '请输入您收到的验证码', trigger: 'blur' },
-						{ min: 6, max: 6, message: '请输入正确长度的验证码', trigger: 'blur' }
+						{ required: true, message: '请输入您收到的验证码'},
+						{ min: 4, max: 6, message: '请输入正确长度的验证码' }
 					]
 				}
 				
@@ -93,7 +94,23 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 				if (valid) {
-					alert('submit!');
+					let user={};
+					user.username=this.formLabelAlign.username;
+					user.userpassword=this.formLabelAlign.password;
+					user.useremail=this.formLabelAlign.email;
+					user.verification=this.formLabelAlign.verification;
+					let data=JSON.stringify(user);
+					console.log(data)
+					registerrequest(data)
+					.then(res=>{
+						this.$message({
+							message: '用户注册成功，可以进行登录了哦',
+							type: 'success'
+						});
+						this.$router.push("/loginandsign");
+					}).catch(error=>{
+						console.log("失败了")
+					})
 				} else {
 					console.log('error submit!!');
 				return false;
@@ -102,16 +119,22 @@
 			},
 			getverification(){
 				let verification={};
+				this.siginloadflag=true;
+				this.$message({
+					message: '验证码已经发送到你的邮箱，收到验证码就可以注册了',
+					type: 'success'
+				});
+
 				verification.email=this.formLabelAlign.email;
-				console.log(typeof verification)
-				console.log(JSON.stringify(verification))
-				console.log(JSON.stringify(verification))
 				loginrequest(JSON.stringify(verification))
 				.then(res=>{
-					console.log("请求到的数据是"+res);
+					this.$message({
+						message: '成功发送到您的邮箱，请注意查收',
+						type: 'success'
+					});
 					this.siginloadflag=false;
 				}).catch(error=>{
-					console.log("恢复倒计时");
+					this.$message.error('如果网络通畅就是你的邮箱填错了哦');
 					this.siginloadflag=false;
 				})
 			}
