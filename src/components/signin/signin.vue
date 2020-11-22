@@ -100,9 +100,9 @@
 					user.useremail=this.formLabelAlign.email;
 					user.verification=this.formLabelAlign.verification;
 					let data=JSON.stringify(user);
-					console.log(data)
 					registerrequest(data)
 					.then(res=>{
+						console.log(res)
 						this.$message({
 							message: '用户注册成功，可以进行登录了哦',
 							type: 'success'
@@ -134,6 +134,7 @@
 					});
 					this.siginloadflag=false;
 				}).catch(error=>{
+					console.log(error)
 					this.$message.error('如果网络通畅就是你的邮箱填错了哦');
 					this.siginloadflag=false;
 				})
