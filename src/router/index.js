@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import LoginandSign from '@/views/Loginasign.vue'
 import Login from '@/components/login/login.vue'
 import Register from '@/components/signin/signin.vue'
+import UpdateUserPassword from '@/components/updatepasword/updatepassword.vue'
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
@@ -30,6 +31,11 @@ const routes = [
 				path:"register",
 				name:"register",
 				component:Register
+			},
+			{
+				path:"updatepasword",
+				name:"updatepasword",
+				component:UpdateUserPassword
 			}
 		]
 	}

@@ -4,12 +4,24 @@
 		  <el-col :span="24">
 		    <div class="login_img">
 					<div>
-						<img src="@/assets/Homeimgs/homearg.jpg" alt="">
+						<img :src="userInfo.userimage" alt="" v-if="userInfo.userimage">
+						<img src="#" alt="" v-else>
 					</div>
 				</div>
 				<div class="username_a_level">
-					<h5>张永</h5>
-					<i class="el-icon-s-custom" style="margin-left: 5px;"></i>
+					<h5 v-if="userInfo.username">{{userInfo.username}}</h5>
+					<h5 v-else>未登录</h5>
+					<div style="color: orange;margin-left: 5px;">
+						<i v-if="0==userInfo.userlevel" style="display: flex;">
+													 <h6>初级</h6>
+						</i>
+						<i v-if="30==userInfo.userlevel" style="display: flex;">
+													  <h6>高级</h6>
+						</i>
+						<i v-if="100==userInfo.userlevel" style="display: flex;">
+								<h6>大师</h6>
+						</i>
+					</div>
 				</div>
 		    <el-menu
 		      default-active="2"
@@ -47,7 +59,12 @@
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       }
-    }
+    },
+	computed:{
+		userInfo(){
+			return this.$store.state.user;
+		}
+	}
   }
 </script>
 
