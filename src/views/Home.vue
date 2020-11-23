@@ -22,7 +22,8 @@ export default {
 	data(){
 		return {
 			dynimicworld:"  不要给自己划界限",
-			dynimicworldtemp:"不"
+			dynimicworldtemp:"不",
+			useryongInof:{}
 		}
 	},
 	created(){
@@ -49,7 +50,12 @@ export default {
 				}
 			},200);
 		}
-	}
+	},
+	// beforeRouteEnter:(to,from,next)=>{
+	//     next(vm=>{
+	// 		vm.useryongInof=vm.$store.state.user;
+	// 	});
+	// }
 }
 </script>
 <style lang="less">
