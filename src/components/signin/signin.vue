@@ -102,7 +102,6 @@
 					let data=JSON.stringify(user);
 					registerrequest(data)
 					.then(res=>{
-						console.log(res)
 						this.$message({
 							message: '用户注册成功，可以进行登录了哦',
 							type: 'success'
@@ -128,6 +127,11 @@
 				verification.email=this.formLabelAlign.email;
 				loginrequest(JSON.stringify(verification))
 				.then(res=>{
+					if(res.data.status==500){
+						this.$message.error(res.data.msg);
+						this.siginloadflag=false;
+						return;
+					}
 					this.$message({
 						message: '成功发送到您的邮箱，请注意查收',
 						type: 'success'

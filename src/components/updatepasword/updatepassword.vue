@@ -7,18 +7,23 @@
 <!-- 				<span><a href="" style="text-decoration: none;">+</a></span> -->
 			</div>
 			<div class="login_title">
-				<h1>Login in Rememberme</h1>
+				<h1>oh you miss the password</h1>
 			</div>
 			<div class="login_form">
 				<el-card class="box-card">
 					<el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign"
 					:rules="rules" ref="ruleForm">
-						<el-form-item label="input you username or email" prop="username" style="text-align: left;">
+						<el-form-item label="input you email" prop="username" style="text-align: left;">
 							<el-input v-model="formLabelAlign.username" placeholder="输入你的用户名或者邮箱"></el-input>
 						</el-form-item>
-						<el-form-item  prop="password" label="input you passworld" style="position: relative; text-align: left;">
-							<span style="position: absolute;top: -50px;z-index: 9;right: 0px;"><a href="" style="text-decoration: none;" v-on:click.prevent="updatepassword">忘记密码？</a></span>
+						<el-form-item  prop="password" label="input you new passworld" style="position: relative; text-align: left;">
 							<el-input v-model="formLabelAlign.password" placeholder="输入你的密码" show-password></el-input>
+						</el-form-item>
+						<el-form-item label=""  prop="vertify">
+							<div style="display: flex;">
+								<el-input v-model="formLabelAlign.vertify" placeholder="验证码" ></el-input>
+								<el-button type="success" style="margin-left: 10px;" @click="getverification"  :loading="siginloadflag">获取验证码</el-button>
+							</div>
 						</el-form-item>
 						<el-button type="success" style="width: 100%;" @click="submitForm('ruleForm')">sign in</el-button>
 					</el-form>
@@ -37,7 +42,8 @@
 </template>
 
 <script>
-	import {siginInrequest} from '@/util/requestaxiosutil/sigInrequest'
+	import {getupdateverify} from '@/util/requestaxiosutil/getupdateverify'
+	import {updatapasswordreq} from '@/util/requestaxiosutil/updatepassword'
 	export default{
 		name:"login",
 		data(){
@@ -45,7 +51,8 @@
 				labelPosition: 'top',
 				formLabelAlign: {
 				username:"",
-				password:""
+				password:"",
+				vertify:""
 				},
 				rules:{
 					username:[
@@ -55,8 +62,13 @@
 					password:[
 						{ required: true, message: '请输入您的密码'},
 						{ min: 3, max: 30, message: '请输入正确的长度（限制不能超过30个字符,最少不能3个字符）'}
+					],
+					vertify:[
+						{ required: true, message: '请输入您收到的验证码'},
+						{ min: 3, max: 7, message: '请输入正确的长度（限制不能超过3个字符,最少不能7个字符）'}
 					]
-				}
+				},
+				siginloadflag:false
 			}
 		},
 		methods:{
@@ -67,39 +79,34 @@
 				// 这里是用户登录
 				this.$refs[formName].validate((valid) => {
 				if (valid) {
+					console.log("更改密码")
+					let userpassword=this.formLabelAlign.password;
+					let useremail=this.formLabelAlign.username;
+					let verification=this.formLabelAlign.vertify;
+					// 这里进行登录请求
 					let user={};
-					let type=1;
-					if(this.formLabelAlign.username.length>10){
-						type=2;
-					}
-					user.siginType=type;
-					user.username=this.formLabelAlign.username;
-					user.userpassword=this.formLabelAlign.password;
-					let data=JSON.stringify(user);
-					console.log(data)
-					siginInrequest(data)
-					.then(res=>{
-						console.log(res)
-						// 获得后端的token并且保存他
-						let token=res.data.data.token;
-						window.localStorage.setItem("usertoken",token);
-						
-						//保存用户基本信息到vuex
-						let user=res.data.data.useryonghu;
-						this.$store.dispatch("saveUserInfoAction",user);
+					user.userpassword=userpassword;
+					user.useremail=useremail;
+					user.verification=verification;
+					updatapasswordreq(JSON.stringify(user))
+					.then((res)=>{
+						// 这里是登录成功
+						if(res.data.status==500){
+							this.$message({
+							    message: res.data.msg,
+							    type: 'error'
+							 });
+							 return;
+						}
 						this.$message({
-						    message: '登录成功，欢迎会员回来',
+						    message: '信息修改成功，快去体验吧',
 						    type: 'success'
 						 });
-						this.$router.push("/");
+						this.$router.push("/loginandsign");
+					}).catch((error)=>{
+						
 					})
-					.catch(error=>{
-						this.$message({
-						    message: '账号或密码错误',
-						    type: 'warning'
-						});
-					})
-					// 这里进行登录请求
+					
 				} else {
 					console.log('error submit!!');
 				return false;
@@ -108,7 +115,29 @@
 			},
 			//修改密码
 			updatepassword(){
-				this.$router.push("/loginandsign/updatepasword")
+				
+			},
+			getverification(){
+				let userEmail=this.formLabelAlign.username;
+				this.siginloadflag=true;
+				console.log(userEmail)
+				let user={};
+				user.useremail=userEmail;
+				getupdateverify(JSON.stringify(user))
+				.then((res)=>{
+					this.$message({
+					    message: '验证码发送成功，请及时查收',
+					    type: 'success'
+					 });
+					 this.siginloadflag=false;
+					
+				}).catch((error)=>{
+					this.$message({
+					   message: '获取验证码错误',
+					  type: 'warning'
+					});
+					this.siginloadflag=false;
+				})
 			}
 		}
 		
