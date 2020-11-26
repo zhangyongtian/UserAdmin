@@ -21,6 +21,9 @@
 							<el-input v-model="formLabelAlign.password" placeholder="输入你的密码" show-password></el-input>
 						</el-form-item>
 						<el-button type="success" style="width: 100%;" @click="submitForm('ruleForm')">sign in</el-button>
+						<el-form-item style="margin-top: 10px;">
+							<el-button type="primary" style="width: 100%;" @click="signout">sign out</el-button>
+						</el-form-item>
 					</el-form>
 				</el-card>
 			</div>
@@ -83,9 +86,10 @@
 						// 获得后端的token并且保存他
 						let token=res.data.data.token;
 						window.localStorage.setItem("usertoken",token);
-						
 						//保存用户基本信息到vuex
 						let user=res.data.data.useryonghu;
+						//保存用户到本地浏览器
+						window.localStorage.setItem("remembermeUser",JSON.stringify(user));
 						this.$store.dispatch("saveUserInfoAction",user);
 						this.$message({
 						    message: '登录成功，欢迎会员回来',
@@ -109,6 +113,12 @@
 			//修改密码
 			updatepassword(){
 				this.$router.push("/loginandsign/updatepasword")
+			},
+			signout(){
+				window.localStorage.removeItem("usertoken");
+				window.localStorage.removeItem("remembermeUser");
+				this.$store.dispatch("deleteuser");
+				this.$router.push("/")
 			}
 		}
 		

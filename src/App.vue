@@ -9,6 +9,11 @@ import Head from '@/components/head/Head.vue'
 export default{
 	components:{
 		Head
+	},
+	mounted(){
+		let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+		this.$store.dispatch("saveUserInfoAction",user);
+		console.log(user);
 	}
 }
 </script>

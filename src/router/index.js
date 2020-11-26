@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import LoginandSign from '@/views/Loginasign.vue'
+import BlogView from '@/views/BlogView.vue'
+
 import Login from '@/components/login/login.vue'
 import Register from '@/components/signin/signin.vue'
 import UpdateUserPassword from '@/components/updatepasword/updatepassword.vue'
@@ -38,7 +40,12 @@ const routes = [
 				component:UpdateUserPassword
 			}
 		]
-	}
+	},
+	{
+    path: '/blogview',
+    name: 'blogview',
+    component: BlogView
+  },
 ]
 
 const router = new VueRouter({

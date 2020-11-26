@@ -106,6 +106,9 @@
 							message: '用户注册成功，可以进行登录了哦',
 							type: 'success'
 						});
+						window.localStorage.removeItem("remembermeUser");
+						window.localStorage.removeItem("usertoken");
+						this.$store.dispatch("deleteuser");
 						this.$router.push("/loginandsign");
 					}).catch(error=>{
 						console.log("失败了")

@@ -102,6 +102,9 @@
 						    message: '信息修改成功，快去体验吧',
 						    type: 'success'
 						 });
+						 window.localStorage.removeItem("remembermeUser");
+						 window.localStorage.removeItem("usertoken");
+						this.$store.dispatch("deleteuser");
 						this.$router.push("/loginandsign");
 					}).catch((error)=>{
 						
