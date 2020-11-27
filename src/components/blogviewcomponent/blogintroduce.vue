@@ -1,20 +1,28 @@
 <template>
 	<div class="blogintroduce_content">
 		<el-row :gutter="10">
+			<div>
+				<div style="display: flex;">
+					<div style="flex: 1;display: flex;justify-content: flex-start;align-items: center;">
+						<img style="width: 35px;height: 35px;border-radius:50% ;float: left;" :src="blog.useryonghu.userimage" alt="">
+						<h3 style="margin-left: 10px;">{{blog.useryonghu.username}}</h3>
+					</div>
+					<div style="flex: 1;">
+						<h6>{{blog.createtime}}</h6>
+					</div>
+				</div>
+			</div>
 			<el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 				<div class="blogintroduce_content_l">
 					<div class="blogintroduce_content_l_t">
-						<img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1606393262&di=79ffbb0e9d9d48cb0e6d363f95c1b12a&src=http://img.kttpdq.com/pic/7/4226/599f58390d0e7355.jpg" alt="">
+						<img :src="blog.headpic" alt="">
 					</div>
 					<div class="blogintroduce_content_l_b">
 						<span>
-							作者
+							{{blog.zangcount}}
 						</span>
 						<span>
-							点赞
-						</span>
-						<span>
-							喜欢
+							{{blog.likes}}
 						</span>
 					</div>
 				</div>
@@ -24,7 +32,7 @@
 					<div class="blogintroduce_content_r_t">
 						<div class="blogintroduce_content_r_t_l">
 							<h2 style="text-align: left;">
-								文章的标题
+								{{blog.title}}
 								<span style="line-height:30px;
 								 float: right;background: orange;height: 30px;width: 60px;border-radius: 20%;
 								 text-align: center;font-size: 15px;">关注+</span>
@@ -36,17 +44,16 @@
 					</div>
 					<div class="blogintroduce_content_r_c">
 						<p style="text-align: left;text-indent: 2em;">
-							2020年9月30日 美桌网为您提供海贼王图片,海贼王图片大全,精心为您挑选最新海贼王图片、最全海贼王图片,欢迎来到美桌网图片库。
-							2020年9月30日 美桌网为您提供海贼王图片,海贼王图片大全,精心为您挑选最新海贼王图片、最全海贼王图片,欢迎来到美桌网图片库。
+							{{blog.introduce}}
 						</p>
 					</div>
 					<div class="blogintroduce_content_r_b" style="text-align: right;">
 						<span style="width: 30px; height: 10px;border:1px solid orange;
-						padding: 5px;color: orange;border-radius:10%;margin: 6px;">前端开发</span>
+						padding: 5px;color: orange;border-radius:10%;margin: 6px;" v-for="item in blog.blogtags">{{item.tagname}}</span>
+					</div>
+					<div class="blogintroduce_content_r_b" style="text-align: right;">
 						<span style="width: 30px; height: 10px;border:1px solid orange;
-						padding: 5px;color: orange;border-radius:10%;margin: 6px;">前端开发</span>
-						<span style="width: 30px; height: 10px;border:1px solid orange;
-						padding: 5px;color: orange;border-radius:10%;margin: 6px;">前端开发</span>
+						padding: 5px;color: orange;border-radius:10%;margin: 6px;" v-for="item in blog.blogclassfiys">{{item.classfiyname}}</span>
 					</div>
 				</div>
 			</el-col>
@@ -59,7 +66,15 @@
 
 <script>
 	export default{
-		name:"blogintroduce"
+		name:"blogintroduce",
+		props:{
+			blog:{
+				type:Object,
+				default(){
+					return {}
+				}
+			}
+		}
 	}
 </script>
 
@@ -98,5 +113,9 @@
 			margin-top: 10px;
 			text-align: right;
 		}
+		
+	}
+	.blogintroduce_content_r_b{
+		margin-top: 20px;
 	}
 </style>
