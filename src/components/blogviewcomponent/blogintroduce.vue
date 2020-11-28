@@ -1,5 +1,7 @@
 <template>
-	<div class="blogintroduce_content">
+	<div class="blogintroduce_content" v-on:click="showDetail(blog.id,item)">
+		<span>{{blog.id}}</span>
+		<span>{{item}}</span>
 		<el-row :gutter="10">
 			<div>
 				<div style="display: flex;">
@@ -73,6 +75,15 @@
 				default(){
 					return {}
 				}
+			},
+			item:{
+				type:Number,
+				default:0
+			}
+		},
+		methods:{
+			showDetail(blogid,item){
+				this.$router.push({ path: `/blogdetail/${blogid}/${item}` })
 			}
 		}
 	}

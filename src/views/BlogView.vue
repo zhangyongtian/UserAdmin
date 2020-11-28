@@ -57,6 +57,13 @@
 							</div>
 						</el-card>
 					</div>
+					
+					<!-- 图表部分 -->
+					<div class="blogview_content_h_r">
+						<el-card class="box-card"  style="text-align: left;margin-top: 30px;">
+							<piechart></piechart>
+						</el-card>
+					</div>
 				</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="15" :xl="15">
 					
@@ -69,8 +76,8 @@
 					</div>
 					
 					<div class="blogview_content_h_l">
-						<template v-for="blog in blogs" item="blog">
-							<blogintroduce :blog="blog"></blogintroduce>
+						<template v-for="(blog,item) in blogs">
+							<blogintroduce :blog="blog" :item="item" :key="item"></blogintroduce>
 						</template>
 					</div>
 					
@@ -93,6 +100,7 @@
 	import {getBlogPageHelper} from '@/util/requestaxiosutil/getBlogPageHelper.js'
 	import {getAllBlogClassfiy} from '@/util/requestaxiosutil/getAllBlogClassfiy.js'
 	import {getAllBlogTags} from '@/util/requestaxiosutil/getAllBlogTags.js'
+	import piechart from '@/components/echarts/piechart'
 	export default{
 		name:"blogview",
 		data() {
@@ -103,28 +111,28 @@
       }
     },
 		components: {
-			blogintroduce
+			blogintroduce,
+			piechart
 		},
 		created() {
-			//获得初始的blog数据
-			let pageNum=1;
-			let pageSize=6;
-			let pageRequest={};
-			pageRequest.pageNum=pageNum;
-			pageRequest.pageSize=pageSize;
-			let data=JSON.stringify(pageRequest);
-			console.log(data)
-			getBlogPageHelper(data).then(res=>{
-				// 下面就是保存得到的数据
-				this.$store.dispatch("saveNowPage",res.data.pageNum);
-				this.$store.dispatch("saveTotalPage",res.data.totalPages);
-				this.$store.dispatch("addBlog",res.data.content);
-				console.log(res)
-				
-			}).catch(error=>{
-				
-			})
-			
+			if(this.$store.state.blogs.length<1){
+				//获得初始的blog数据
+				let pageNum=1;
+				let pageSize=6;
+				let pageRequest={};
+				pageRequest.pageNum=pageNum;
+				pageRequest.pageSize=pageSize;
+				let data=JSON.stringify(pageRequest);
+				getBlogPageHelper(data).then(res=>{
+					// 下面就是保存得到的数据
+					this.$store.dispatch("saveNowPage",res.data.pageNum);
+					this.$store.dispatch("saveTotalPage",res.data.totalPages);
+					this.$store.dispatch("addBlog",res.data.content);
+					
+				}).catch(error=>{
+					
+				})
+			}
 			// 下面是获得初始的分类
 			getAllBlogClassfiy().then(res=>{
 				
