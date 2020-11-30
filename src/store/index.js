@@ -8,7 +8,9 @@ export default new Vuex.Store({
 	  user:{},
 	  blogs:[],
 	  nowpage:1,
-	  totalpage:0
+	  totalpage:0,
+	  userlikes:[],
+	  userlikeblogtemp:{}
   },
   mutations: {
 	  saveUserInfo(state,user){
@@ -33,8 +35,17 @@ export default new Vuex.Store({
 		  })
 		  
 		  state.nowpage+=1;
+	  },
+	  saveUserLikes(state,userlikes){
+		  state.userlikes=userlikes;
+	  },
+	  deleteUserlikes(state){
+		  state.userlikes=[]
+	  },
+	  // 这里是用户喜欢的博客中间的一个传递值
+	  saveuserlikeblogtemp(state,userlikeblog){
+		  state.userlikeblogtemp=userlikeblog;
 	  }
-	  
   },
   actions: {
 	  saveUserInfoAction(content,user){
@@ -56,6 +67,16 @@ export default new Vuex.Store({
 	  // 下面是添加blogs
 	  addBlog(content,blogs){
 	  	content.commit("addBlog",blogs)
+	  },
+	  // 下面是保存用户喜欢的所有的博客id
+	  saveUserLikes(content,userlikes){
+		  content.commit("saveUserLikes",userlikes);
+	  },
+	  deleteUserlikes(content){
+		  content.commit("deleteUserlikes");
+	  },
+	  saveuserlikeblogtemp(content,saveuserlikeblogtemp){
+		  content.commit("saveuserlikeblogtemp",saveuserlikeblogtemp)
 	  }
   },
   modules: {

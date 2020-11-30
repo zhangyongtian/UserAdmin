@@ -7,6 +7,7 @@ import BlogView from '@/views/BlogView.vue'
 import Login from '@/components/login/login.vue'
 import Register from '@/components/signin/signin.vue'
 import UpdateUserPassword from '@/components/updatepasword/updatepassword.vue'
+import concren from '@/views/concern.vue'
 
 // 下面是博客的详情页面
 import blogdetail from '@/components/blogviewcomponent/blogdetail'
@@ -53,6 +54,11 @@ const routes = [
 	  path:'/blogdetail/:blogid/:bloginstoreitem',
 	  name: 'blogdetail',
 	  component:blogdetail
+	},
+	{
+		path:"/concern",
+		name:"concern",
+		component:()=>import('@/views/concern.vue')
 	}
 ]
 

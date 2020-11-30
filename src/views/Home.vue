@@ -13,7 +13,7 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
-
+import {getAllUserLikeBlog} from '@/util/requestaxiosutil/getAllUserLikeBlog.js'
 export default {
   name: 'Home',
   components: {
@@ -27,7 +27,25 @@ export default {
 		}
 	},
 	created(){
-		this.dynamicworldmethod()
+		this.dynamicworldmethod();	
+		
+		let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+			// 下面是获取用户所有喜欢的blogid(就是点过赞的)
+			// let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+			let usertemp={};
+			usertemp.userid=user.id;
+			getAllUserLikeBlog(JSON.stringify(usertemp)).then(res=>{
+				let userlikeblog=[];
+				let temp=res.data.data;
+				temp.forEach(function(item){
+					userlikeblog.push(item.blogid);
+				})
+				this.$store.dispatch("saveUserLikes",userlikeblog);
+				console.log(this.$store.state.userlikes)
+			}).catch(error=>{
+				
+			})
+		
 	},
 	methods:{
 		dynamicworldmethod(){

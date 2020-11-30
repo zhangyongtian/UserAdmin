@@ -101,6 +101,7 @@
 	import {getAllBlogClassfiy} from '@/util/requestaxiosutil/getAllBlogClassfiy.js'
 	import {getAllBlogTags} from '@/util/requestaxiosutil/getAllBlogTags.js'
 	import piechart from '@/components/echarts/piechart'
+
 	export default{
 		name:"blogview",
 		data() {
@@ -125,6 +126,7 @@
 				let data=JSON.stringify(pageRequest);
 				getBlogPageHelper(data).then(res=>{
 					// 下面就是保存得到的数据
+					// console.log(res)
 					this.$store.dispatch("saveNowPage",res.data.pageNum);
 					this.$store.dispatch("saveTotalPage",res.data.totalPages);
 					this.$store.dispatch("addBlog",res.data.content);
@@ -148,6 +150,8 @@
 				console.log("获得便签错误")
 			})
 			
+			
+			
 		},
 		computed:{
 			blogs(){
@@ -168,7 +172,7 @@
 				pageRequest.pageNum=pageNum;
 				pageRequest.pageSize=pageSize;
 				let data=JSON.stringify(pageRequest);
-				console.log(data)
+				// console.log(data)
 				getBlogPageHelper(data).then(res=>{
 					// 下面就是保存得到的数据
 					this.$store.dispatch("saveNowPage",res.data.pageNum);

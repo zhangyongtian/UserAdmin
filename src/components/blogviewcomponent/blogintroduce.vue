@@ -1,7 +1,8 @@
 <template>
 	<div class="blogintroduce_content" v-on:click="showDetail(blog.id,item)">
-		<span>{{blog.id}}</span>
-		<span>{{item}}</span>
+		<!-- 博客的id还有存储在store里面的index -->
+<!-- 		<span>{{blog.id}}</span>
+		<span>{{item}}</span> -->
 		<el-row :gutter="10">
 			<div>
 				<div style="display: flex;">
@@ -20,12 +21,17 @@
 						<img :src="blog.headpic" alt="">
 					</div>
 					<div class="blogintroduce_content_l_b">
-						<span>
-							{{blog.zangcount}}
-						</span>
-						<span>
-							{{blog.likes}}
-						</span>
+						<span @click.stop="zang">
+							<span v-if="thumbsUp"style="color: red;" class="icon iconfont icon-iconfontzhizuobiaozhun023148-copy"></span>
+							<span v-else  class="icon iconfont icon-iconfontzhizuobiaozhun023148"></span>  {{blog.zangcount}}
+							
+							</span>
+							<!-- 这里显示的是喜欢，感觉有点多余 -->
+<!-- 						<span @click.stop="like">
+							<span v-if="likes" style="color: red;" class="icon iconfont icon-zan"></span> 
+							<span v-else  class="icon iconfont icon-zan"></span>   {{blog.likes}}
+							
+						</span> -->
 					</div>
 				</div>
 			</el-col>
@@ -35,9 +41,6 @@
 						<div class="blogintroduce_content_r_t_l">
 							<h2 style="text-align: left;">
 								{{blog.title}}
-								<span style="line-height:30px;
-								 float: right;background: orange;height: 30px;width: 60px;border-radius: 20%;
-								 text-align: center;font-size: 15px;">关注+</span>
 							</h2>
 						</div>
 						<div class="blogintroduce_content_r_t_r">
@@ -67,6 +70,8 @@
 </template>
 
 <script>
+	import {userlikeblog} from "@/util/requestaxiosutil/userlikeblog"
+	import {deleteuserlikeblog} from "@/util/requestaxiosutil/deleteuserlikeblog"
 	export default{
 		name:"blogintroduce",
 		props:{
@@ -79,12 +84,57 @@
 			item:{
 				type:Number,
 				default:0
+				
 			}
 		},
 		methods:{
 			showDetail(blogid,item){
 				this.$router.push({ path: `/blogdetail/${blogid}/${item}` })
+			},
+			zang(){
+				this.thumbsUp=!this.thumbsUp;
+				
+				if(this.thumbsUp){
+					this.blog.zangcount++;
+					console.log("喜欢")
+					console.log(this.userid);
+					console.log(this.blog.id);
+					let userlikeblogg={};
+					userlikeblogg.userid=this.userid;
+					userlikeblogg.blogid=this.blog.id;
+					userlikeblog(JSON.stringify(userlikeblogg)).then(res=>{
+						console.log(res)
+						console.log("成功")
+					}).catch(error=>{
+						console.log("失败了")
+					})
+				}else{
+					this.blog.zangcount--;
+					console.log("不喜欢")
+					let userlikeblogg={};
+					userlikeblogg.userid=this.userid;
+					userlikeblogg.blogid=this.blog.id;
+					deleteuserlikeblog(JSON.stringify(userlikeblogg))
+					.then(res=>{
+						console.log("成功")
+					}).catch(error=>{
+						console.log("失败了")
+					})
+				}
+				
 			}
+		},
+		data(){
+			return {
+				thumbsUp:false,
+				likes:false,
+				userid:this.$store.state.user.id
+			}
+		},
+		created() {
+			this.thumbsUp=false;
+			this.thumbsUp=this.$store.state.userlikes.indexOf(this.blog.id)>=0;
+			console.log(this.$store.state.userlikes.indexOf(this.blog.id)>=0)
 		}
 	}
 </script>
