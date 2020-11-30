@@ -95,6 +95,7 @@
 						    message: '登录成功，欢迎会员回来',
 						    type: 'success'
 						 });
+						 
 						this.$router.push("/");
 					})
 					.catch(error=>{
@@ -118,7 +119,8 @@
 				window.localStorage.removeItem("usertoken");
 				window.localStorage.removeItem("remembermeUser");
 				this.$store.dispatch("deleteuser");
-				this.$router.push("/")
+				this.$router.push("/");
+				this.$store.dispatch("deleteUserlikes")
 			}
 		}
 		

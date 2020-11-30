@@ -1,21 +1,37 @@
 <template>
-	<div class="blogintroduce_content">
+	<div class="blogintroduce_content" v-on:click="showDetail(blog.id,item)">
+		<!-- 博客的id还有存储在store里面的index -->
+<!-- 		<span>{{blog.id}}</span>
+		<span>{{item}}</span> -->
 		<el-row :gutter="10">
+			<div>
+				<div style="display: flex;">
+					<div style="flex: 1;display: flex;justify-content: flex-start;align-items: center;">
+						<img style="width: 35px;height: 35px;border-radius:50% ;float: left;" :src="blog.useryonghu.userimage" alt="">
+						<h3 style="margin-left: 10px;">{{blog.useryonghu.username}}</h3>
+					</div>
+					<div style="flex: 1;">
+						<h6>{{blog.createtime}}</h6>
+					</div>
+				</div>
+			</div>
 			<el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
 				<div class="blogintroduce_content_l">
 					<div class="blogintroduce_content_l_t">
-						<img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1606393262&di=79ffbb0e9d9d48cb0e6d363f95c1b12a&src=http://img.kttpdq.com/pic/7/4226/599f58390d0e7355.jpg" alt="">
+						<img :src="blog.headpic" alt="">
 					</div>
 					<div class="blogintroduce_content_l_b">
-						<span>
-							作者
-						</span>
-						<span>
-							点赞
-						</span>
-						<span>
-							喜欢
-						</span>
+						<span @click.stop="zang">
+							<span v-if="thumbsUp"style="color: red;" class="icon iconfont icon-iconfontzhizuobiaozhun023148-copy"></span>
+							<span v-else  class="icon iconfont icon-iconfontzhizuobiaozhun023148"></span>  {{blog.zangcount}}
+							
+							</span>
+							<!-- 这里显示的是喜欢，感觉有点多余 -->
+<!-- 						<span @click.stop="like">
+							<span v-if="likes" style="color: red;" class="icon iconfont icon-zan"></span> 
+							<span v-else  class="icon iconfont icon-zan"></span>   {{blog.likes}}
+							
+						</span> -->
 					</div>
 				</div>
 			</el-col>
@@ -24,10 +40,7 @@
 					<div class="blogintroduce_content_r_t">
 						<div class="blogintroduce_content_r_t_l">
 							<h2 style="text-align: left;">
-								文章的标题
-								<span style="line-height:30px;
-								 float: right;background: orange;height: 30px;width: 60px;border-radius: 20%;
-								 text-align: center;font-size: 15px;">关注+</span>
+								{{blog.title}}
 							</h2>
 						</div>
 						<div class="blogintroduce_content_r_t_r">
@@ -36,17 +49,16 @@
 					</div>
 					<div class="blogintroduce_content_r_c">
 						<p style="text-align: left;text-indent: 2em;">
-							2020年9月30日 美桌网为您提供海贼王图片,海贼王图片大全,精心为您挑选最新海贼王图片、最全海贼王图片,欢迎来到美桌网图片库。
-							2020年9月30日 美桌网为您提供海贼王图片,海贼王图片大全,精心为您挑选最新海贼王图片、最全海贼王图片,欢迎来到美桌网图片库。
+							{{blog.introduce}}
 						</p>
 					</div>
 					<div class="blogintroduce_content_r_b" style="text-align: right;">
 						<span style="width: 30px; height: 10px;border:1px solid orange;
-						padding: 5px;color: orange;border-radius:10%;margin: 6px;">前端开发</span>
+						padding: 5px;color: orange;border-radius:10%;margin: 6px;" v-for="item in blog.blogtags">{{item.tagname}}</span>
+					</div>
+					<div class="blogintroduce_content_r_b" style="text-align: right;">
 						<span style="width: 30px; height: 10px;border:1px solid orange;
-						padding: 5px;color: orange;border-radius:10%;margin: 6px;">前端开发</span>
-						<span style="width: 30px; height: 10px;border:1px solid orange;
-						padding: 5px;color: orange;border-radius:10%;margin: 6px;">前端开发</span>
+						padding: 5px;color: orange;border-radius:10%;margin: 6px;" v-for="item in blog.blogclassfiys">{{item.classfiyname}}</span>
 					</div>
 				</div>
 			</el-col>
@@ -58,8 +70,72 @@
 </template>
 
 <script>
+	import {userlikeblog} from "@/util/requestaxiosutil/userlikeblog"
+	import {deleteuserlikeblog} from "@/util/requestaxiosutil/deleteuserlikeblog"
 	export default{
-		name:"blogintroduce"
+		name:"blogintroduce",
+		props:{
+			blog:{
+				type:Object,
+				default(){
+					return {}
+				}
+			},
+			item:{
+				type:Number,
+				default:0
+				
+			}
+		},
+		methods:{
+			showDetail(blogid,item){
+				this.$router.push({ path: `/blogdetail/${blogid}/${item}` })
+			},
+			zang(){
+				this.thumbsUp=!this.thumbsUp;
+				
+				if(this.thumbsUp){
+					this.blog.zangcount++;
+					console.log("喜欢")
+					console.log(this.userid);
+					console.log(this.blog.id);
+					let userlikeblogg={};
+					userlikeblogg.userid=this.userid;
+					userlikeblogg.blogid=this.blog.id;
+					userlikeblog(JSON.stringify(userlikeblogg)).then(res=>{
+						console.log(res)
+						console.log("成功")
+					}).catch(error=>{
+						console.log("失败了")
+					})
+				}else{
+					this.blog.zangcount--;
+					console.log("不喜欢")
+					let userlikeblogg={};
+					userlikeblogg.userid=this.userid;
+					userlikeblogg.blogid=this.blog.id;
+					deleteuserlikeblog(JSON.stringify(userlikeblogg))
+					.then(res=>{
+						console.log("成功")
+					}).catch(error=>{
+						console.log("失败了")
+					})
+				}
+				
+			}
+		},
+		data(){
+			return {
+				thumbsUp:false,
+				likes:false,
+				userid:this.$store.state.user.id
+			}
+		},
+		created() {
+			this.thumbsUp=false;
+			this.thumbsUp=this.$store.state.userlikes.indexOf(this.blog.id)>=0;
+			console.log(this.$store.state.userlikes.indexOf(this.blog.id)>=0)
+		}
 	}
 </script>
 
@@ -98,5 +174,9 @@
 			margin-top: 10px;
 			text-align: right;
 		}
+		
+	}
+	.blogintroduce_content_r_b{
+		margin-top: 20px;
 	}
 </style>
