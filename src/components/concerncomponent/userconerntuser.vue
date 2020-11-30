@@ -1,25 +1,25 @@
 <template>
-	<div class="user_conernt_user">
+	<div class="user_conernt_user" @click="toconerntdetail">
 		<el-card class="box-card">
 			<div class="user_content">
 				<div class="user_conernt_user_l">
-					<img src="https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3220314562,1203413086&fm=26&gp=0.jpg" alt="">
+					<img :src="user.userimage" alt="">
 				</div>
 				<div class="user_conernt_user_r">
 					<div>
-						<strong>zhang</strong>
-						<span v-if="0==0">
+						<strong>{{user.username}}</strong>
+						<span style="color: orange;" v-if="0==user.userlevel">
 							初级
 						</span>
-						<span v-if="30==0">
+						<span style="color: orange;" v-if="30==user.userlevel">
 							高级
 						</span>
-						<span v-if="100==0">
+						<span style="color: orange;" v-if="100==user.userlevel">
 							大师
 						</span>
 					</div>
 					<div>
-						邮箱
+						{{user.useremail}}
 					</div>
 				</div>
 				
@@ -36,6 +36,9 @@
 </template>
 
 <script>
+	// 下面都是操作关注的
+	import {savexinxin} from '@/util/requestaxiosutil/userconernt'
+	import {deletexinxin} from '@/util/requestaxiosutil/userconernt'
 	export default{
 		name:"userconernt",
 		data(){
@@ -46,6 +49,44 @@
 		methods:{
 			conerntt(){
 				this.conernt=!this.conernt;
+				if(!this.conernt){
+					console.log("关注");
+					let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+					let userandxinxin={};
+					userandxinxin.userid=user.id;
+					userandxinxin.xinxinid=this.user.id;
+					
+					console.log(JSON.stringify(userandxinxin))
+					savexinxin(JSON.stringify(userandxinxin)).then(res=>{
+						console.log(res)
+					}).catch(error=>{
+						
+					})
+				}else{
+					console.log("取消关注");
+					let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+					let userandxinxin={};
+					userandxinxin.userid=user.id;
+					userandxinxin.xinxinid=this.user.id;
+					deletexinxin(JSON.stringify(userandxinxin)).then(res=>{
+						console.log(res)
+					}).catch(error=>{
+						
+					})
+					console.log("取注")
+				}
+			},
+			toconerntdetail(){
+				// this.$router.push({ path: `/blogdetail/${blogid}/${item}` })
+				this.$router.push({path:`/Userdetail/${this.user.id}`})
+			}
+		},
+		props:{
+			user:{
+				type:Object,
+				default(){
+					return{}
+				}
 			}
 		}
 	}

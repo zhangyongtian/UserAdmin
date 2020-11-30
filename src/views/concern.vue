@@ -33,7 +33,9 @@
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
 						<div class="grid-content bg-purple">
-							<userconerntuser></userconerntuser>
+							<template v-for="item in xinxin">
+								<userconerntuser :user="item"></userconerntuser>
+							</template>
 						</div>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
@@ -53,6 +55,11 @@
 	import {getAllUserLikeBlog} from '@/util/requestaxiosutil/getAllUserLikeBlog.js'
 	import userlikes from '@/components/concerncomponent/userlikes'
 	import userconerntuser from '@/components/concerncomponent/userconerntuser'
+	
+	// 这里就是过得所有的关注的id
+	import {getAllXinXin} from '@/util/requestaxiosutil/userconernt'
+	// 这里根据关注的id查询所有的用户
+	import {getAllXinXinContent} from '@/util/requestaxiosutil/userconernt'
 	export default{
 		name:"concern",
 		components:{
@@ -93,13 +100,31 @@
 				
 			})
 			
+			
+			//这里获取所有关注的作者
+			let useryonghu=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+			let userandxinxin={};
+			userandxinxin.userid=useryonghu.id;
+			getAllXinXin(JSON.stringify(userandxinxin)).then(res=>{
+				let xinxin={};
+				xinxin.xinxinids=res.data.data;
+				getAllXinXinContent(JSON.stringify(xinxin)).then(res=>{
+					// 这里根据关注的id获取到关注的用户
+					this.xinxin=res.data.data;
+				}).catch(error=>{
+					
+				})
+			}).catch(error=>{
+				
+			})
 
 			
 		},
 		data(){
 			return{
 				userlikeblogid:[],
-				blogs:[]
+				blogs:[],
+				xinxin:[]
 			}
 		}
 	}

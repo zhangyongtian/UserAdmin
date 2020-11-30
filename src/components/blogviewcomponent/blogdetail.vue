@@ -32,11 +32,13 @@
 											<h6>大师</h6>
 										</span>
 									</div>
-								<el-button type="warning" size="mini" style="margin-left: 5px;">关注</el-button>
+								<div @click="conernclick">
+									<el-button type="warning" size="mini" style="margin-left: 5px;" v-if="conernt">关注+</el-button>
+									<el-button type="warning" size="mini" style="margin-left: 5px;" v-else>取关+</el-button>
+								</div>
 							</div>
 							<div style="display: flex;align-items: flex-end;">
 								<span>{{blog.createtime}}</span>
-								<span>喜欢{{blog.likes}}</span>
 								<span>点赞{{blog.zangcount}}</span>
 							</div>
 						</div>
@@ -109,6 +111,9 @@
 	import blogcomment from '@/components/blogviewcomponent/blogcomment'
 	import {savecomment} from '@/util/requestaxiosutil/savecomment'
 	import {showParentComment} from '@/util/requestaxiosutil/showParentComment'
+	import {savexinxin} from '@/util/requestaxiosutil/userconernt'
+	import {deletexinxin} from '@/util/requestaxiosutil/userconernt'
+	import {getAllXinXin} from '@/util/requestaxiosutil/userconernt'
 	export default{
 		name:"blogDetail",
 		created() {
@@ -129,7 +134,17 @@
 			}).catch(error=>{
 				
 			})
-			
+			// 这里就是获取所有的用户关注的id
+			// 只要过去用户的id就可以了
+			let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+			let userandxinxin={};
+			userandxinxin.userid=user.id;
+			getAllXinXin(JSON.stringify(userandxinxin)).then(res=>{
+				this.xinxinids=res.data.data;
+				this.conernt=this.xinxinids.indexOf(this.blog.useryonghu.id)<0;
+			}).catch(error=>{
+				
+			})
 		},
 		data(){
 			return {
@@ -137,7 +152,9 @@
 				textarea:"",
 				loading:false,
 				comments:[],
-				nowuserid:this.$store.state.user.id
+				nowuserid:this.$store.state.user.id,
+				conernt:true,
+				xinxinids:[]
 			}
 		},
 		components:{
@@ -169,6 +186,36 @@
 			},
 			reset(){
 				this.textarea="";
+			},
+			// 这里是控制用户关注用户的事件
+			conernclick(){
+				this.conernt=!this.conernt;
+				if(!this.conernt){
+					// 关注用户需要自己的id还有关注者的id
+					console.log("关注");
+					let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+					let userandxinxin={};
+					userandxinxin.userid=user.id;
+					userandxinxin.xinxinid=this.blog.useryonghu.id;
+					
+					console.log(JSON.stringify(userandxinxin))
+					savexinxin(JSON.stringify(userandxinxin)).then(res=>{
+						console.log(res)
+					}).catch(error=>{
+						
+					})
+				}else{
+					let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+					let userandxinxin={};
+					userandxinxin.userid=user.id;
+					userandxinxin.xinxinid=this.blog.useryonghu.id;
+					deletexinxin(JSON.stringify(userandxinxin)).then(res=>{
+						console.log(res)
+					}).catch(error=>{
+						
+					})
+					console.log("取注")
+				}
 			}
 		}
 	}
