@@ -64,6 +64,21 @@ const routes = [
 		path:"/Userdetail/:userid",
 		name:"Userdetail",
 		component:()=>import('@/views/Userdetail.vue')
+	},
+	{
+		path:"/Photos",
+		name:"Photos",
+		component:()=>import('@/views/Photos.vue')
+	},
+	{
+		path:"/message",
+		name:"message",
+		component:()=>import('@/views/message.vue')
+	},
+	{
+		path:"/aboutme",
+		name:"aboutme",
+		component:()=>import('@/views/aboutme.vue')
 	}
 	
 ]

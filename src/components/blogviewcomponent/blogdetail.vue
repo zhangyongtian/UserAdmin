@@ -116,6 +116,7 @@
 	import {getAllXinXin} from '@/util/requestaxiosutil/userconernt'
 	export default{
 		name:"blogDetail",
+		// 这里用到了简单工厂模式,就是不利于扩展，工厂方法模式就是薄创建的方法抽象出来
 		created() {
 			if(this.$route.params.bloginstoreitem!=-1){
 				this.blog=this.$store.state.blogs[this.$route.params.bloginstoreitem];

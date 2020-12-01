@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="z-index: 99999;position: relative;">
 	  <!-- //这个是左边的隐藏菜单的按钮 -->
 	  <el-row class="hidden-lg-and-up">
 	     <el-col :span="24">
@@ -49,9 +49,9 @@
 	  			  	    <el-tab-pane label="首页" name=""></el-tab-pane>
 	  			  	    <el-tab-pane label="博文" name="blogview"></el-tab-pane>
 	  			  	    <el-tab-pane label="我的关注" name="concern"></el-tab-pane>
-	  			  	    <el-tab-pane label="留言" name="four"></el-tab-pane>
-	  			  	  	<el-tab-pane label="照片墙" name="five"></el-tab-pane>
-	  			  	  	<el-tab-pane label="关于站长" name="six"></el-tab-pane>
+	  			  	    <el-tab-pane label="留言" name="message"></el-tab-pane>
+	  			  	  	<el-tab-pane label="照片墙" name="Photos"></el-tab-pane>
+	  			  	  	<el-tab-pane label="关于站长" name="aboutme"></el-tab-pane>
 	  			  	  	<el-tab-pane label="登录/注册" name="loginandsign"></el-tab-pane>
 	  			  	  </el-tabs>
 	  			  </div>

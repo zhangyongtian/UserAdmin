@@ -42,4 +42,21 @@ const getAllXinXinContent=data=>{
 		data
 	})
 }
-export {getuserlikesandcontent,savexinxin,deletexinxin,getAllXinXin,getAllXinXinContent}
+
+const getXinXinById=data=>{
+	return request({
+		method:"POST",
+		url:"/rememberme/getXinXinById",
+		data
+	})
+}
+
+// 根据用户的id获取所有的blog
+const getBlogsByUserId=data=>{
+	return request({
+		method:"POST",
+		url:"/rememberme/getBlogsByUserId",
+		data
+	})
+}
+export {getuserlikesandcontent,savexinxin,deletexinxin,getAllXinXin,getAllXinXinContent,getXinXinById,getBlogsByUserId}

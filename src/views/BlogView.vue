@@ -13,7 +13,7 @@
 							<el-tag
 									v-for="item in BlogClassfiy"
 									:key="item.classfiyid"
-									effect="dark" style="margin: 5px;">
+									effect="dark" style="margin: 5px;" @click="goclassfiy(item.classfiyid)">
 								{{ item.classfiyname }}
 							</el-tag>
 						</el-card>
@@ -28,33 +28,20 @@
 									v-for="item in BlogTags"
 									:key="item.tagid"
 									:type="item.type"
-									effect="dark" style="margin: 5px;">
+									effect="dark" style="margin: 5px;" @click="gotag(item.tagid)">
 								{{ item.tagname }}
 							</el-tag>
 						</el-card>
 					</div>
 					<!-- 文章的排行 -->
 					<div class="blogview_content_h_r">
-						<el-card class="box-card"  style="text-align: left;margin-top: 30px;">
-							<div slot="header" class="clearfix">
-								<span>推荐作者</span>
-							</div>
-							<div>
-								<div style="display: flex;">
-									<div style="flex: 3;display: flex;justify-content: center;align-items: center;">
-										<img style=" width: 50px;height: 50px;border-radius: 50%;" src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1606393262&di=79ffbb0e9d9d48cb0e6d363f95c1b12a&src=http://img.kttpdq.com/pic/7/4226/599f58390d0e7355.jpg" alt="">
-									</div>
-									<div style="flex: 7;">
-										<div>
-											<h3>发哦的身份罚款<span style="float: right;font-size: 15px;color: orange;">关注+</span></h3>
-										</div>
-										<div>
-											<span>文章78</span>
-											<span>文章78</span>
-										</div>
-									</div>
-								</div>
-							</div>
+						<el-card class="box-card" style="margin-top: 10px;">
+						<div slot="header" class="clearfix">
+							<span>推荐的作者</span>
+						</div>
+						<template v-for="item in recommenduser">
+							<userconerntuser :user="item"></userconerntuser>
+						</template>
 						</el-card>
 					</div>
 					
@@ -101,6 +88,8 @@
 	import {getAllBlogClassfiy} from '@/util/requestaxiosutil/getAllBlogClassfiy.js'
 	import {getAllBlogTags} from '@/util/requestaxiosutil/getAllBlogTags.js'
 	import piechart from '@/components/echarts/piechart'
+	import {getrecommenduser} from '@/util/requestaxiosutil/getrecommenduser'
+	import userconerntuser from '@/components/concerncomponent/userconerntuser'
 
 	export default{
 		name:"blogview",
@@ -108,12 +97,15 @@
 			return {
 				BlogClassfiy: [],
 				haveMove:true,
-				BlogTags:[]
+				BlogTags:[],
+				recommenduser:[]
+				
       }
     },
 		components: {
 			blogintroduce,
-			piechart
+			piechart,
+			userconerntuser
 		},
 		created() {
 			if(this.$store.state.blogs.length<1){
@@ -150,7 +142,12 @@
 				console.log("获得便签错误")
 			})
 			
-			
+			//这里获得推荐的作者
+			getrecommenduser().then(res=>{
+				this.recommenduser=res.data.data;
+			}).catch(error=>{
+				
+			})
 			
 		},
 		computed:{
@@ -182,6 +179,12 @@
 				}).catch(error=>{
 					
 				})
+			},
+			goclassfiy(classfiyid){
+				console.log("现在的分类的id是"+classfiyid)
+			},
+			gotag(tagid){
+				console.log("现在点击的tagid"+tagid)
 			}
 		}
 	}
