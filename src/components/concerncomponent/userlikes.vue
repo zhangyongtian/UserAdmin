@@ -17,7 +17,7 @@
 		</div>
       <div class="uselikes_content_top">
 		  <div class="uselikes_content_top_l">
-			  <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+			  <img :src="blog.headpic" class="image">
 		  </div>
 		  <div class="uselikes_content_top_r">
 			  <!-- 这里是内容的部分 -->
@@ -134,7 +134,8 @@
 				margin: 6px;
 				&>img{
 					width: 100%;
-					height: 60%;
+					height: 100%;
+					border-radius: 10px;
 				}
 			}
 			.uselikes_content_top_r{

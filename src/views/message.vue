@@ -10,7 +10,7 @@
 						<div class="grid-content bg-purple">
 						<el-card>		
 							<el-timeline>
-							  <el-timeline-item timestamp="2018/4/12" placement="top">
+							  <el-timeline-item timestamp="留言板" placement="top">
 							    <usermessage></usermessage>
 							  </el-timeline-item>
 							</el-timeline>

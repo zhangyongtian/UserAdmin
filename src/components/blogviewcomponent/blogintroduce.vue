@@ -149,7 +149,7 @@
 					margin-top: 35px;
 					width: 80%;
 					height: 100px;
-					border-radius: 20%;
+					border-radius: 5px;
 				}
 			}
 			.blogintroduce_content_l_b{

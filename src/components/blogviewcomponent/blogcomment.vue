@@ -32,11 +32,11 @@
 				</div>
 				<div>
 					<el-link :underline="false">
-					<span @click="thumbsup">
+	<!-- 				<span @click="thumbsup">
 						<span v-if="thumbsUp"style="color: red;" class="icon iconfont icon-iconfontzhizuobiaozhun023148-copy"></span>
 						<span v-else  class="icon iconfont icon-iconfontzhizuobiaozhun023148"></span>
-					</span>	
-					{{userAndParenetComent.parnetcomment.zangcount}}
+					</span>	 -->
+					<!-- {{userAndParenetComent.parnetcomment.zangcount}} -->
 					</el-link>
 					<el-link :underline="false" style="margin-left: 6px;" @click="replay(userAndParenetComent.useryonghu.username)">回复</el-link>
 				</div>

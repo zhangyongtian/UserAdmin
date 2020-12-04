@@ -39,7 +39,7 @@
 							</div>
 							<div style="display: flex;align-items: flex-end;">
 								<span>{{blog.createtime}}</span>
-								<span>点赞{{blog.zangcount}}</span>
+								<!-- <span>点赞{{blog.zangcount}}</span> -->
 							</div>
 						</div>
 					</div>
@@ -51,7 +51,7 @@
 					</div>
 					<!-- 赞赏 -->
 					<div style="text-align: center;">
-						<el-button type="warning" round>打赏</el-button>
+						<!-- <el-button type="warning" round>打赏</el-button> -->
 					</div>
 					<!-- 分类 -->
 					<div style="text-align: right;">

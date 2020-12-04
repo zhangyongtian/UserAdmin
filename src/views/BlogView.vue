@@ -1,5 +1,20 @@
 <template>
 	<div class="blogview_content">
+		<el-backtop :bottom="100" :visibility-height="100">
+    <div
+      style="{
+        height: 100%;
+        width: 100%;
+        background-color: #f2f5f6;
+        box-shadow: 0 0 6px rgba(0,0,0, .12);
+        text-align: center;
+        line-height: 40px;
+        color: #1989fa;
+		}"
+		>
+		<i class="el-icon-arrow-up"></i>
+		</div>
+		</el-backtop>
 		<!-- 上部分包括轮播 -->
 		<div class="blogview_content_h">
 			<el-row :gutter="60">
@@ -192,6 +207,10 @@
 
 <style lang="less">
 	.blogview_content{
+		.page-component__scroll{
+			width: 100px;
+			height: 100px;
+		}
 		.blogview_content_h{
 			margin-top: 3%;
 			
