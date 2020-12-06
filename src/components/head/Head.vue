@@ -14,7 +14,8 @@
          title="我是标题"
          :visible.sync="drawer"
          :with-header="false"
-		 :direction="direction">
+		 :direction="direction"
+		  size="70%">
          <leftmenu></leftmenu>
        </el-drawer>
 	   

@@ -29,7 +29,11 @@
 									v-for="item in BlogClassfiy"
 									:key="item.classfiyid"
 									effect="dark" style="margin: 5px;" @click="goclassfiy(item.classfiyid)">
-								{{ item.classfiyname }}
+								
+								<template>
+									<span v-if="nowclassfiy==item.classfiyid" style="color: orange;">{{ item.classfiyname }}</span>
+									<span v-else>{{ item.classfiyname }}</span>
+								</template>
 							</el-tag>
 						</el-card>
 					</div>
@@ -44,7 +48,11 @@
 									:key="item.tagid"
 									:type="item.type"
 									effect="dark" style="margin: 5px;" @click="gotag(item.tagid)">
-								{{ item.tagname }}
+								<template>
+									<span v-if="nowtag==item.tagid" style="color: orange;">{{ item.tagname }}</span>
+									<span v-else>{{ item.tagname }}</span>
+								</template>	
+								
 							</el-tag>
 						</el-card>
 					</div>
@@ -53,6 +61,11 @@
 						<el-card class="box-card" style="margin-top: 10px;">
 						<div slot="header" class="clearfix">
 							<span>推荐的作者</span>
+							<span style="margin-left: 2px;">{{userpageNum}}/{{usertotalpages}}</span>
+							<template>
+								<el-button style="float: right; padding: 3px 0" type="text" @click="getnext">下一页>>></el-button>
+								<el-button  style="float: right; padding: 3px 0" type="text" @click="getbefault"><<<上一页</el-button>
+							</template>
 						</div>
 						<template v-for="item in recommenduser">
 							<userconerntuser :user="item"></userconerntuser>
@@ -71,8 +84,8 @@
 					
 					<div class="blogview_content_h_l">
 						<el-carousel :interval="4000" type="card" height="200px">
-							<el-carousel-item v-for="item in 6" :key="item">
-								<img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1606393262&di=79ffbb0e9d9d48cb0e6d363f95c1b12a&src=http://img.kttpdq.com/pic/7/4226/599f58390d0e7355.jpg" alt="">
+							<el-carousel-item v-for="item in photos">
+								<img :src="item.imgurl" alt=""  :key="item">
 							</el-carousel-item>
 						</el-carousel>
 					</div>
@@ -105,6 +118,8 @@
 	import piechart from '@/components/echarts/piechart'
 	import {getrecommenduser} from '@/util/requestaxiosutil/getrecommenduser'
 	import userconerntuser from '@/components/concerncomponent/userconerntuser'
+	
+	import {selectPagePhoto} from '@/util/requestaxiosutil/getphoto.js'
 
 	export default{
 		name:"blogview",
@@ -113,7 +128,19 @@
 				BlogClassfiy: [],
 				haveMove:true,
 				BlogTags:[],
-				recommenduser:[]
+				recommenduser:[],
+				photos:[],
+				
+				// 下面是推荐用户的分页
+				userpageNum:1,
+				userpageSize:6,
+				usertotalpages:-1,
+				showmore:true,
+				
+				
+				// 下面是选中的tag还有classfiyid
+				nowtag:-1,
+				nowclassfiy:-1
 				
       }
     },
@@ -158,8 +185,23 @@
 			})
 			
 			//这里获得推荐的作者
-			getrecommenduser().then(res=>{
-				this.recommenduser=res.data.data;
+			let userRequest={};
+			userRequest.pageNum=this.userpageNum;
+			userRequest.pageSize=this.userpageSize;
+			getrecommenduser(JSON.stringify(userRequest)).then(res=>{
+				console.log(res)
+				this.recommenduser=res.data.data.content;
+				this.usertotalpages=res.data.data.totalPages;
+			}).catch(error=>{
+				
+			})
+			
+			//这里是获取轮播图
+			let pageRequest={};
+			pageRequest.pageNum=1;
+			pageRequest.pageSize=6;
+			selectPagePhoto(JSON.stringify(pageRequest)).then(res=>{
+				this.photos=res.data.data.content;
 			}).catch(error=>{
 				
 			})
@@ -196,10 +238,52 @@
 				})
 			},
 			goclassfiy(classfiyid){
-				console.log("现在的分类的id是"+classfiyid)
+				console.log("现在的分类的id是"+classfiyid);
+				this.nowclassfiy=classfiyid;
 			},
 			gotag(tagid){
 				console.log("现在点击的tagid"+tagid)
+				this.nowtag=tagid;
+			},
+			getnext(){
+				console.log("获取更多")
+				console.log(this.usertotalpages)
+				console.log(this.userpageNum)
+				
+				if(this.userpageNum==this.usertotalpages){
+					return;
+				}
+				//这里获得推荐的作者
+				this.userpageNum++;
+				let userRequest={};
+				userRequest.pageNum=this.userpageNum;
+				userRequest.pageSize=this.userpageSize;
+				getrecommenduser(JSON.stringify(userRequest)).then(res=>{
+					console.log(res)
+					this.recommenduser=res.data.data.content;
+				}).catch(error=>{
+					
+				})
+			},
+			getbefault(){
+				console.log("上一页")
+				console.log(this.usertotalpages)
+				console.log(this.userpageNum)
+				
+				if(this.userpageNum==1){
+					return;
+				}
+				//这里获得推荐的作者
+				this.userpageNum--;
+				let userRequest={};
+				userRequest.pageNum=this.userpageNum;
+				userRequest.pageSize=this.userpageSize;
+				getrecommenduser(JSON.stringify(userRequest)).then(res=>{
+					console.log(res)
+					this.recommenduser=res.data.data.content;
+				}).catch(error=>{
+					
+				})
 			}
 		}
 	}

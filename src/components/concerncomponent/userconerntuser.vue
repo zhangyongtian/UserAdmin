@@ -1,5 +1,5 @@
 <template>
-	<div class="user_conernt_user" @click="toconerntdetail">
+	<div class="user_conernt_user" @click="toconerntdetail" style="margin-top: 10px;">
 		<el-card class="box-card">
 			<div class="user_content">
 				<div class="user_conernt_user_l">
@@ -100,17 +100,13 @@
 			let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
 			let userandxinxin={};
 			userandxinxin.userid=user.id;
-			console.log("fdksjfl")
-			console.log(userandxinxin)
 			getAllXinXin(JSON.stringify(userandxinxin)).then(res=>{
 				this.xinxinids=res.data.data;
 				if(this.xinxinids.length==0){
 					this.conernt=true;
 				}else{
-					this.conernt=this.xinxinids.indexOf(this.blog.useryonghu.id)<0;
+					this.conernt=this.xinxinids.indexOf(this.user.id)<0;
 				}
-				console.log("fjsjfjldsk00")
-				console.log(this.xinxinids)
 				console.log(res)
 			}).catch(error=>{
 				

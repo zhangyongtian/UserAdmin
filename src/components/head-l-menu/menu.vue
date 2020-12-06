@@ -35,13 +35,13 @@
 		          <span>主菜单</span>
 		        </template>
 		        <el-menu-item-group style="text-align:left;">
-		          <el-menu-item index="1-1">首页</el-menu-item>
-		          <el-menu-item index="1-2">博文</el-menu-item>
-							<el-menu-item index="1-3">我的关注</el-menu-item>
-							<el-menu-item index="1-4">留言</el-menu-item>
-							<el-menu-item index="1-5">照片墙</el-menu-item>
-							<el-menu-item index="1-6">关注站长</el-menu-item>
-							<el-menu-item index="loginandsign">登录注册</el-menu-item>
+		          <el-menu-item index="/">首页</el-menu-item>
+		          <el-menu-item index="/blogview">博文</el-menu-item>
+							<el-menu-item index="/concern">我的关注</el-menu-item>
+							<el-menu-item index="/message">留言</el-menu-item>
+							<el-menu-item index="/Photos">照片墙</el-menu-item>
+							<el-menu-item index="/aboutme">关注站长</el-menu-item>
+							<el-menu-item index="/loginandsign">登录注册</el-menu-item>
 		        </el-menu-item-group>
 		      </el-submenu>
 		    </el-menu>

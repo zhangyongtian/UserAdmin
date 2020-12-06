@@ -75,7 +75,7 @@
 					</div>
 					<div style="text-align: left;display: flex;">
 						<div style="flex: 1;">
-							<img :src="blog.useryonghu.userimage" alt="" style="width: 50px;height: 50px;border-radius:50% ;">
+							<img :src="userimg" alt="" style="width: 50px;height: 50px;border-radius:50% ;">
 						</div>
 						<div style="flex: 9;">
 							<el-input
@@ -155,7 +155,8 @@
 				comments:[],
 				nowuserid:this.$store.state.user.id,
 				conernt:true,
-				xinxinids:[]
+				xinxinids:[],
+				userimg:this.$store.state.user.userimage
 			}
 		},
 		components:{

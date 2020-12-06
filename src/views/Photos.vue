@@ -14,26 +14,29 @@
 </template>
 
 <script>
+	import {selectAllPhoto} from '@/util/requestaxiosutil/getphoto.js'
 	export default{
 		name:"photos",
 		data(){
 			return{
 				m3d:null,
 				imges:[ 
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png'},
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' },
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' },
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' },
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' },
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' },
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' },
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' },
-						{ src: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' }
+						
 				]
 			}
 		},
 		created() {
-			
+			selectAllPhoto().then(res=>{
+				let data=res.data.data;
+				this.imges=[]
+				data.forEach((img)=>{
+					let temp={}
+					temp.src=img.imgurl;
+					this.imges.push(temp);
+				})
+			}).catch(error=>{
+				
+			})
 			
 		},
 		mounted() {

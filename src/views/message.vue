@@ -9,11 +9,7 @@
 					<el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
 						<div class="grid-content bg-purple">
 						<el-card>		
-							<el-timeline>
-							  <el-timeline-item timestamp="留言板" placement="top">
-							    <usermessage></usermessage>
-							  </el-timeline-item>
-							</el-timeline>
+							   <usermessage></usermessage>
 						</el-card>
 						</div>
 					</el-col>

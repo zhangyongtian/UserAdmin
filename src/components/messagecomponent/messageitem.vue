@@ -41,6 +41,7 @@
 <style lang="less">
 	.usermessage_content{
 		margin-top: 10px;
+		width: 100%;
 		.message_content{
 			.usermessage_content_t{
 				display: flex;

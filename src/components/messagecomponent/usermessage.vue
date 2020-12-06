@@ -1,20 +1,37 @@
 <template>
 	<div class="usermessageadmin_content">
-		<template v-for="item in messageAndUser">
-			<messageitem :messageanduser="item"></messageitem>
-		</template>
+		<el-row :gutter="10">
+			<el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+				<div>
+					.
+				</div>
+			</el-col>
+			<el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+				<template v-for="item in messageAndUser">
+					<messageitem :messageanduser="item"></messageitem>
+				</template>
+				<div style="margin-top: 10px;">
+					<el-pagination
+				  @size-change="handleSizeChange"
+				  @current-change="handleCurrentChange"
+				  :current-page="currentPage4"
+				  :page-sizes="pageSizes"
+				  :page-size="pageSize"
+				  layout="total, sizes, prev, pager, next, jumper"
+				  :total="total">
+				</el-pagination>
+				</div>
+			</el-col>
+			<el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
+				<div>
+					.
+				</div>
+			</el-col>
+		</el-row>
 		
-		<div style="margin-top: 10px;">
-			<el-pagination
-		  @size-change="handleSizeChange"
-		  @current-change="handleCurrentChange"
-		  :current-page="currentPage4"
-		  :page-sizes="pageSizes"
-		  :page-size="pageSize"
-		  layout="total, sizes, prev, pager, next, jumper"
-		  :total="total">
-		</el-pagination>
-		</div>
+		
+		
+		
 	</div>
 </template>
 
