@@ -114,16 +114,23 @@
 	import {savexinxin} from '@/util/requestaxiosutil/userconernt'
 	import {deletexinxin} from '@/util/requestaxiosutil/userconernt'
 	import {getAllXinXin} from '@/util/requestaxiosutil/userconernt'
+	import {getBlogByIdAndUser} from '@/util/requestaxiosutil/userlikeblog'
+	
 	export default{
 		name:"blogDetail",
 		// 这里用到了简单工厂模式,就是不利于扩展，工厂方法模式就是薄创建的方法抽象出来
+		// 这里的代码要修改不能偷工
 		created() {
-			if(this.$route.params.bloginstoreitem!=-1){
-				this.blog=this.$store.state.blogs[this.$route.params.bloginstoreitem];
-			}else{
-				this.blog=this.$store.state.userlikeblogtemp;
-			}
-			console.log(this.blog)
+			// 下面是根据id获得blogcomment
+			let blog={};
+			blog.id=this.$route.params.blogid;
+			getBlogByIdAndUser(JSON.stringify(blog)).then(res=>{
+				this.blog=res.data.data;
+			}).catch(error=>{
+				
+			})
+			
+			
 			let parentComent={};
 			parentComent.blogid=this.$route.params.blogid;
 			let rparentComent=JSON.stringify(parentComent);

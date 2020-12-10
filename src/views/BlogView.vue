@@ -85,7 +85,7 @@
 					<div class="blogview_content_h_l">
 						<el-carousel :interval="4000" type="card" height="200px">
 							<el-carousel-item v-for="item in photos">
-								<img :src="item.imgurl" alt=""  :key="item">
+								<img :src="item.imgurl" alt="">
 							</el-carousel-item>
 						</el-carousel>
 					</div>
