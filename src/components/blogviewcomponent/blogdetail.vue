@@ -126,6 +126,18 @@
 			blog.id=this.$route.params.blogid;
 			getBlogByIdAndUser(JSON.stringify(blog)).then(res=>{
 				this.blog=res.data.data;
+				
+				// 这里就是获取所有的用户关注的id
+				// 只要过去用户的id就可以了
+				let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
+				let userandxinxin={};
+				userandxinxin.userid=user.id;
+				getAllXinXin(JSON.stringify(userandxinxin)).then(res=>{
+					this.xinxinids=res.data.data;
+					this.conernt=this.xinxinids.indexOf(this.blog.useryonghu.id)<0;
+				}).catch(error=>{
+					
+				})
 			}).catch(error=>{
 				
 			})
@@ -142,17 +154,7 @@
 			}).catch(error=>{
 				
 			})
-			// 这里就是获取所有的用户关注的id
-			// 只要过去用户的id就可以了
-			let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
-			let userandxinxin={};
-			userandxinxin.userid=user.id;
-			getAllXinXin(JSON.stringify(userandxinxin)).then(res=>{
-				this.xinxinids=res.data.data;
-				this.conernt=this.xinxinids.indexOf(this.blog.useryonghu.id)<0;
-			}).catch(error=>{
-				
-			})
+			
 		},
 		data(){
 			return {
