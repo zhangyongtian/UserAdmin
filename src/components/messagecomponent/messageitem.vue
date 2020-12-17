@@ -11,7 +11,7 @@
 					  :src="messageanduser.useryonghu.userimage" alt="">    
 				  </div>
 					<span style="flex: 1;">{{messageanduser.useryonghu.username}}</span>
-					<span style="flex: 1;">{{messageanduser.useryonghu.createtime}}</span>
+					<span style="flex: 1;">{{messageanduser.useryonghu.createtime|dateFilter}}</span>
 			  </div>
 			  <div class="usermessage_content_c">
 			  		<p>{{messageanduser.message}}</p>	  
@@ -33,6 +33,12 @@
 				default(){
 					return {}
 				}
+			}
+		},
+		filters:{
+			dateFilter(item){
+				let pointFlag=item.indexOf(".");
+				return item.substring(0,pointFlag).replace("T","  ");
 			}
 		}
 	}

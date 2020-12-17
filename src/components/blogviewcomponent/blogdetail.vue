@@ -38,7 +38,7 @@
 								</div>
 							</div>
 							<div style="display: flex;align-items: flex-end;">
-								<span>{{blog.createtime}}</span>
+								<span>{{blog.createtime|dateFilter}}</span>
 								<!-- <span>点赞{{blog.zangcount}}</span> -->
 							</div>
 						</div>
@@ -227,6 +227,12 @@
 					})
 					console.log("取注")
 				}
+			}
+		},
+		filters:{
+			dateFilter(item){
+				let pointFlag=item.indexOf(".");
+				return item.substring(0,pointFlag).replace("T","  ");
 			}
 		}
 	}

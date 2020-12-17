@@ -1,5 +1,7 @@
 <template>
 	<div class="blogview_content">
+		
+		
 		<el-backtop :bottom="100" :visibility-height="100">
     <div
       style="{
@@ -26,6 +28,11 @@
 								<span>分类</span>
 							</div>
 							<el-tag
+								effect="dark" style="margin: 5px;" @click="categorpAll">
+								<span v-if="nowclassfiy==-1" style="color: orange;">全部</span>
+								<span v-else>全部</span>
+							</el-tag>
+							<el-tag
 									v-for="item in BlogClassfiy"
 									:key="item.classfiyid"
 									effect="dark" style="margin: 5px;" @click="goclassfiy(item.classfiyid)">
@@ -43,6 +50,11 @@
 							<div slot="header" class="clearfix">
 								<span>标签</span>
 							</div>
+							<el-tag
+								effect="dark" style="margin: 5px;" @click="tagAll">
+								<span v-if="nowtag==-1" style="color: orange;">全部</span>
+								<span v-else>全部</span>
+							</el-tag>
 							<el-tag
 									v-for="item in BlogTags"
 									:key="item.tagid"
@@ -81,6 +93,13 @@
 					</div>
 				</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="15" :xl="15">
+					<!-- 这里是搜索框 -->
+					<el-input
+					placeholder="请输入内容"
+					suffix-icon="el-icon-search"
+					v-model="search" style="margin-bottom: 20px;">
+					</el-input>
+					
 					
 					<div class="blogview_content_h_l">
 						<el-carousel :interval="4000" type="card" height="200px">
@@ -140,7 +159,9 @@
 				
 				// 下面是选中的tag还有classfiyid
 				nowtag:-1,
-				nowclassfiy:-1
+				nowclassfiy:-1,
+				// 这里是搜索的时候使用
+				search:""
 				
       }
     },
@@ -214,6 +235,7 @@
 		},
 		methods:{
 			getmore(){
+				// 现在要加入分类的id还有标签的id
 				let pageNum=this.$store.state.nowpage;
 				let pageSize=6;
 				let pageTotal=this.$store.state.totalpage;
@@ -225,6 +247,10 @@
 				let pageRequest={};
 				pageRequest.pageNum=pageNum;
 				pageRequest.pageSize=pageSize;
+				// 这里加入条件
+				pageRequest.nowclassfiy=this.nowclassfiy;
+				pageRequest.nowtag=this.nowtag;
+				
 				let data=JSON.stringify(pageRequest);
 				// console.log(data)
 				getBlogPageHelper(data).then(res=>{
@@ -238,10 +264,14 @@
 				})
 			},
 			goclassfiy(classfiyid){
+				//这里要处理他们选中的classfiy每点击下就是重新加载新的数据
+				// 先删除所有的数据
+				// 然后用getBlogPageHelper按条件查找一次
 				console.log("现在的分类的id是"+classfiyid);
 				this.nowclassfiy=classfiyid;
 			},
 			gotag(tagid){
+				//这里是要使用tagid每点击下就是重新加载新的数据
 				console.log("现在点击的tagid"+tagid)
 				this.nowtag=tagid;
 			},
@@ -284,6 +314,13 @@
 				}).catch(error=>{
 					
 				})
+			},
+			// 点击全部的时候是这里
+			categorpAll(){
+				this.nowclassfiy=-1;
+			},
+			tagAll(){
+				this.nowtag=-1;
 			}
 		}
 	}

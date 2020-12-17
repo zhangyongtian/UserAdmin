@@ -7,7 +7,7 @@
 				<span>{{blog.useryonghu.username}}</span>
 			</div>
 			<div class="uselikes_content_head_r">
-				<span>{{blog.createtime}}</span>
+				<span>{{blog.createtime|dateFilter}}</span>
 				<span @click.stop="thumbsup" style="float: right;">
 					<span v-if="thumbsUp"style="color: red;" class="icon iconfont icon-iconfontzhizuobiaozhun023148-copy"></span>
 					<span v-else  class="icon iconfont icon-iconfontzhizuobiaozhun023148"></span>
@@ -97,6 +97,12 @@
 		},
 		created() {
 			this.thumbsUp=this.$store.state.userlikes.indexOf(this.blog.id)>=0;
+		}
+		,filters:{
+			dateFilter(item){
+				let pointFlag=item.indexOf(".");
+				return item.substring(0,pointFlag).replace("T","  ");
+			}
 		}
 	}
 </script>

@@ -11,7 +11,7 @@
 						<h3 style="margin-left: 10px;">{{blog.useryonghu.username}}</h3>
 					</div>
 					<div style="flex: 1;">
-						<h6>{{blog.createtime}}</h6>
+						<h6>{{blog.createtime|dateFilter}}</h6>
 					</div>
 				</div>
 			</div>
@@ -135,6 +135,12 @@
 			this.thumbsUp=false;
 			this.thumbsUp=this.$store.state.userlikes.indexOf(this.blog.id)>=0;
 			console.log(this.$store.state.userlikes.indexOf(this.blog.id)>=0)
+		},
+		filters:{
+			dateFilter(item){
+				let pointFlag=item.indexOf(".");
+				return item.substring(0,pointFlag).replace("T","  ");
+			}
 		}
 	}
 </script>

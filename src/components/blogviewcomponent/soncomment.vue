@@ -18,7 +18,7 @@
 						等级 大师
 					</span>
 				</div>
-				<span>{{item.soncomment.createtime}}</span>
+				<span>{{item.soncomment.createtime|dateFilter}}</span>
 			</div>
 		</div>
 		
@@ -59,6 +59,12 @@
 		data(){
 			return{
 				thumbsUp:false
+			}
+		},
+		filters:{
+			dateFilter(item){
+				let pointFlag=item.indexOf(".");
+				return item.substring(0,pointFlag).replace("T","  ");
 			}
 		}
 	}
