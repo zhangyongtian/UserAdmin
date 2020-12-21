@@ -48,6 +48,7 @@
 	export default{
 		name:"userdetails",
 		created() {
+			let loadingInstance=this.$loading({})
 			let user={};
 			user.id=this.$route.params.userid;
 			getXinXinById(JSON.stringify(user)).then(res=>{
@@ -61,13 +62,10 @@
 					this.totalPage=res.data.data.totalPages;
 					this.totalSize=res.data.data.totalSize;
 					let content=res.data.data.content;
-					console.log(res)
-					console.log("下面是我的博客的内容")
+					loadingInstance.close();
 					for(let index in content){
 						this.blogs.push(content[index]);
 					}
-					console.log("下面是我的博客的内容")
-					console.log(this.blog)
 				}).catch(error=>{
 					
 				})
@@ -92,20 +90,21 @@
 		},
 		methods:{
 			getMoreBlog(){
+				
 				this.pageNum++;
+				// 这里判断一下是否还可以加载
+				if(this.pageNum>this.totalPage){
+					this.pageNum--;
+					this.canloadmore=false;
+					return;
+				}
 				let usertemp={};
 				usertemp.pageSize=this.pageSize;
 				usertemp.pageNum=this.pageNum;
 				// 这里的userid是用户的自增加的id
 				usertemp.userid=this.user.id;
 				getBlogsByUserId(JSON.stringify(usertemp)).then(res=>{
-					// 这里判断一下是否还可以加载
-					if(this.pageNum>this.totalPage){
-						
-						this.pageNum--;
-						this.canloadmore=false;
-						return;
-					}
+					
 					let content=res.data.data.content;
 					console.log(content)
 					console.log("下面是我的博客的内容")

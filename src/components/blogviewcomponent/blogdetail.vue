@@ -1,5 +1,20 @@
 <template>
 	<div class="blogDetail">
+		<div class="blogDetail_mulu" style="position: fixed;left: 0px;bottom: 10%;z-index: 9999;overflow: hidden;">
+			<!-- 定义一个生成目录的地方 -->
+			<el-popover
+				placement="right"
+				width="6%"
+				trigger="click">
+				<div class="tail">
+					<ol class="js-toc">
+						
+					</ol>
+				</div>
+				<el-button slot="reference"><i class="el-icon-s-operation"></i>目录</el-button>
+			</el-popover>
+		</div>
+		
 		<el-row :gutter="10">
 			<el-col :xs="24" :sm="24" :md="4" :lg="4" :xl="4">
 				<div>
@@ -44,7 +59,7 @@
 						</div>
 					</div>
 					<!-- 博客的内容的部分 -->
-					<div class="blogDetail_cotent_c typo typo-selection">
+					<div class="blogDetail_cotent_c typo typo-selection js-toc-content">
 						<div v-html="blog.content">
 							
 						</div>
@@ -108,6 +123,8 @@
 </template>
 
 <script> 
+	import "@/assets/tocbot.css"
+	import "@/assets/tocbot.min.js"
 	import blogcomment from '@/components/blogviewcomponent/blogcomment'
 	import {savecomment} from '@/util/requestaxiosutil/savecomment'
 	import {showParentComment} from '@/util/requestaxiosutil/showParentComment'
@@ -121,6 +138,7 @@
 		// 这里用到了简单工厂模式,就是不利于扩展，工厂方法模式就是薄创建的方法抽象出来
 		// 这里的代码要修改不能偷工
 		created() {
+			let loadingInstance=this.$loading({})
 			// 下面是根据id获得blogcomment
 			let blog={};
 			blog.id=this.$route.params.blogid;
@@ -135,6 +153,7 @@
 				getAllXinXin(JSON.stringify(userandxinxin)).then(res=>{
 					this.xinxinids=res.data.data;
 					this.conernt=this.xinxinids.indexOf(this.blog.useryonghu.id)<0;
+					loadingInstance.close();
 				}).catch(error=>{
 					
 				})
@@ -150,10 +169,11 @@
 			// 开始加载的时候就是查询评论一次
 			showParentComment(rparentComent).then(res=>{
 				this.comments=res.data.data;
-				console.log(this.comments)
 			}).catch(error=>{
 				
 			})
+			
+			
 			
 		},
 		data(){
@@ -203,7 +223,6 @@
 				this.conernt=!this.conernt;
 				if(!this.conernt){
 					// 关注用户需要自己的id还有关注者的id
-					console.log("关注");
 					let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
 					let userandxinxin={};
 					userandxinxin.userid=user.id;
@@ -225,7 +244,6 @@
 					}).catch(error=>{
 						
 					})
-					console.log("取注")
 				}
 			}
 		},
@@ -234,6 +252,20 @@
 				let pointFlag=item.indexOf(".");
 				return item.substring(0,pointFlag).replace("T","  ");
 			}
+		},
+		updated() {
+			let nihao=document.getElementsByClassName("js-toc-content");
+			console.log(nihao)
+			tocbot.init({
+				// Where to render the table of contents.这是生成的目录放在哪里
+				tocSelector:'.js-toc',
+			// Where to grab the headings to build the table of contents.要生成目录的位置
+				contentSelector:'.typo-selection',
+				// Which headings to grab inside of the contentSelector element.
+				headingSelector:'h1, h2, h3',
+  // For headings inside relative or absolute positioned containers within content.
+				hasInnerContainers: true,
+			});
 		}
 	}
 </script>

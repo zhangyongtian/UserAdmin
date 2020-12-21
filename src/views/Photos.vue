@@ -42,6 +42,7 @@
 			
 		},
 		mounted() {
+			let loadingInstance=this.$loading({})
 			selectAllPhoto().then(res=>{
 				let data=res.data.data;
 				this.imges=[]
@@ -50,6 +51,7 @@
 					temp.src=img.imgurl;
 					this.imges.push(temp);
 				})
+				loadingInstance.close();
 				this.imges.push({ src: 'https://dss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3879643875,124327823&fm=26&gp=0.jpg'})
 				var m3D = function () {
 					/* ---- private vars ---- */

@@ -12,6 +12,8 @@ import '@/assets/prism.js'
 
 import '@/assets/icon/zanglikes/zanglikes.css'
 
+import { Loading } from 'element-ui';
+
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 Vue.use(ElementUI);

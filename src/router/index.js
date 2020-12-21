@@ -13,6 +13,7 @@ import Userdetail from '@/views/Userdetail.vue'
 import aboutme from '@/views/aboutme.vue'
 import message from '@/views/message.vue'
 import photos from '@/views/Photos.vue'
+import screen from '@/views/screen.vue'
 
 // 下面是博客的详情页面
 import blogdetail from '@/components/blogviewcomponent/blogdetail'
@@ -84,6 +85,11 @@ const routes = [
 		path:"/aboutme",
 		name:"aboutme",
 		component:aboutme
+	},
+	{
+		path:"/screen",
+		name:"screen",
+		component:screen
 	}
 	
 ]

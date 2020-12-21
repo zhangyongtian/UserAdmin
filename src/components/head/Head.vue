@@ -49,6 +49,7 @@
 	  			  	  <el-tabs v-model="activeName" @tab-click="handleClick" :stretch="true">
 	  			  	    <el-tab-pane label="首页" name=""></el-tab-pane>
 	  			  	    <el-tab-pane label="博文" name="blogview"></el-tab-pane>
+						<el-tab-pane label="筛选" name="screen"></el-tab-pane>
 	  			  	    <el-tab-pane label="我的关注" name="concern"></el-tab-pane>
 	  			  	    <el-tab-pane label="留言" name="message"></el-tab-pane>
 	  			  	  	<el-tab-pane label="照片墙" name="Photos"></el-tab-pane>

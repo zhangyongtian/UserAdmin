@@ -37,6 +37,7 @@
 		        <el-menu-item-group style="text-align:left;">
 		          <el-menu-item index="/">首页</el-menu-item>
 		          <el-menu-item index="/blogview">博文</el-menu-item>
+				  <el-menu-item index="/screen">筛选</el-menu-item>
 							<el-menu-item index="/concern">我的关注</el-menu-item>
 							<el-menu-item index="/message">留言</el-menu-item>
 							<el-menu-item index="/Photos">照片墙</el-menu-item>

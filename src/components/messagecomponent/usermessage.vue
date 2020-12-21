@@ -54,6 +54,7 @@
 		this.getAllMessageAndUser(this.currentPage4,this.pageSize);
       },
 	  getAllMessageAndUser(pageNum,pageSize){
+		  let loadingInstance=this.$loading({})
 		  let pageRequest={};
 		  pageRequest.pageNum=pageNum;
 		  pageRequest.pageSize=pageSize;
@@ -63,7 +64,7 @@
 		  	this.pageSize=data.pageSize;
 		  	this.total=data.totalSize;
 			this.messageAndUser=data.content;
-			console.log(this.messageAndUser)
+			loadingInstance.close();
 		  }).catch(error=>{
 		  	
 		  })
@@ -79,7 +80,9 @@
       };
     },
 	created(){
+		
 		this.getAllMessageAndUser(this.currentPage4,this.pageSize);
+		
 	}
 	}
 </script>

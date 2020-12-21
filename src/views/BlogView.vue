@@ -23,50 +23,11 @@
 				<el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
 					<!-- 分类的部分 -->
 					<div class="blogview_content_h_r">
-						<el-card class="box-card">
-							<div slot="header" class="clearfix">
-								<span>分类</span>
-							</div>
-							<el-tag
-								effect="dark" style="margin: 5px;" @click="categorpAll">
-								<span v-if="nowclassfiy==-1" style="color: orange;">全部</span>
-								<span v-else>全部</span>
-							</el-tag>
-							<el-tag
-									v-for="item in BlogClassfiy"
-									:key="item.classfiyid"
-									effect="dark" style="margin: 5px;" @click="goclassfiy(item.classfiyid)">
-								
-								<template>
-									<span v-if="nowclassfiy==item.classfiyid" style="color: orange;">{{ item.classfiyname }}</span>
-									<span v-else>{{ item.classfiyname }}</span>
-								</template>
-							</el-tag>
-						</el-card>
+						
 					</div>
 					<!-- 标签的部分 -->
 					<div class="blogview_content_h_r">
-						<el-card class="box-card"  style="text-align: left;margin-top: 30px;">
-							<div slot="header" class="clearfix">
-								<span>标签</span>
-							</div>
-							<el-tag
-								effect="dark" style="margin: 5px;" @click="tagAll">
-								<span v-if="nowtag==-1" style="color: orange;">全部</span>
-								<span v-else>全部</span>
-							</el-tag>
-							<el-tag
-									v-for="item in BlogTags"
-									:key="item.tagid"
-									:type="item.type"
-									effect="dark" style="margin: 5px;" @click="gotag(item.tagid)">
-								<template>
-									<span v-if="nowtag==item.tagid" style="color: orange;">{{ item.tagname }}</span>
-									<span v-else>{{ item.tagname }}</span>
-								</template>	
-								
-							</el-tag>
-						</el-card>
+						
 					</div>
 					<!-- 文章的排行 -->
 					<div class="blogview_content_h_r">
@@ -85,19 +46,18 @@
 						</el-card>
 					</div>
 					
-					<!-- 图表部分 -->
+					<!-- 这里是图表，由于服务器的原因以后做 -->
+<!-- 					图表部分
 					<div class="blogview_content_h_r">
 						<el-card class="box-card"  style="text-align: left;margin-top: 30px;">
 							<piechart></piechart>
 						</el-card>
-					</div>
+					</div> -->
 				</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="15" :xl="15">
 					<!-- 这里是搜索框 -->
-					<el-input
-					placeholder="请输入内容"
-					suffix-icon="el-icon-search"
-					v-model="search" style="margin-bottom: 20px;">
+					<el-input placeholder="请输入内容" v-model="search" class="input-with-select" style="margin-bottom: 20px;">
+						<el-button slot="append" icon="el-icon-search" @click="searchblog"></el-button>
 					</el-input>
 					
 					
@@ -139,14 +99,17 @@
 	import userconerntuser from '@/components/concerncomponent/userconerntuser'
 	
 	import {selectPagePhoto} from '@/util/requestaxiosutil/getphoto.js'
+	
+	// 下面是在es上面进行查询
+	import {esclientrequest} from '@/util/requestaxiosutil/esclientrequest.js'
+	
+
 
 	export default{
 		name:"blogview",
 		data() {
 			return {
-				BlogClassfiy: [],
 				haveMove:true,
-				BlogTags:[],
 				recommenduser:[],
 				photos:[],
 				
@@ -155,13 +118,10 @@
 				userpageSize:6,
 				usertotalpages:-1,
 				showmore:true,
-				
-				
-				// 下面是选中的tag还有classfiyid
-				nowtag:-1,
-				nowclassfiy:-1,
-				// 这里是搜索的时候使用
-				search:""
+				search:"",
+				espageNum:1,
+				espageSize:6,
+				esusertotalpages:-1
 				
       }
     },
@@ -171,6 +131,8 @@
 			userconerntuser
 		},
 		created() {
+			this.$store.state.blogs=[];
+			let loadingInstance=this.$loading({})
 			if(this.$store.state.blogs.length<1){
 				//获得初始的blog数据
 				let pageNum=1;
@@ -181,36 +143,23 @@
 				let data=JSON.stringify(pageRequest);
 				getBlogPageHelper(data).then(res=>{
 					// 下面就是保存得到的数据
-					// console.log(res)
+					 console.log(res)
 					this.$store.dispatch("saveNowPage",res.data.pageNum);
 					this.$store.dispatch("saveTotalPage",res.data.totalPages);
 					this.$store.dispatch("addBlog",res.data.content);
+					loadingInstance.close();
 					
 				}).catch(error=>{
 					
 				})
 			}
-			// 下面是获得初始的分类
-			getAllBlogClassfiy().then(res=>{
-				
-				this.BlogClassfiy=res.data.data;
-			}).catch(error=>{
-				console.log("获取blog的分类有错误")
-			})
-			
-			// 下面是获得标签
-			getAllBlogTags().then(res=>{
-				this.BlogTags=res.data.data;
-			}).catch(error=>{
-				console.log("获得便签错误")
-			})
+
 			
 			//这里获得推荐的作者
 			let userRequest={};
 			userRequest.pageNum=this.userpageNum;
 			userRequest.pageSize=this.userpageSize;
 			getrecommenduser(JSON.stringify(userRequest)).then(res=>{
-				console.log(res)
 				this.recommenduser=res.data.data.content;
 				this.usertotalpages=res.data.data.totalPages;
 			}).catch(error=>{
@@ -235,51 +184,58 @@
 		},
 		methods:{
 			getmore(){
-				// 现在要加入分类的id还有标签的id
-				let pageNum=this.$store.state.nowpage;
-				let pageSize=6;
-				let pageTotal=this.$store.state.totalpage;
-				if(pageNum>pageTotal){
-					pageNum-=1;
-					this.haveMove=false;
-					return;
-				}
-				let pageRequest={};
-				pageRequest.pageNum=pageNum;
-				pageRequest.pageSize=pageSize;
-				// 这里加入条件
-				pageRequest.nowclassfiy=this.nowclassfiy;
-				pageRequest.nowtag=this.nowtag;
 				
-				let data=JSON.stringify(pageRequest);
-				// console.log(data)
-				getBlogPageHelper(data).then(res=>{
-					// 下面就是保存得到的数据
-					this.$store.dispatch("saveNowPage",res.data.pageNum);
-					this.$store.dispatch("saveTotalPage",res.data.totalPages);
-					this.$store.dispatch("addBlog",res.data.content);
+				if(this.search==""){
+					// 现在要加入分类的id还有标签的id
+					let pageNum=this.$store.state.nowpage;
+					let pageSize=6;
+					let pageTotal=this.$store.state.totalpage;
+					if(pageNum>pageTotal){
+						pageNum-=1;
+						this.haveMove=false;
+						return;
+					}
+					let pageRequest={};
+					pageRequest.pageNum=pageNum;
+					pageRequest.pageSize=pageSize;
+					// 这里加入条件
+					pageRequest.nowclassfiy=this.nowclassfiy;
+					pageRequest.nowtag=this.nowtag;
 					
-				}).catch(error=>{
+					let data=JSON.stringify(pageRequest);
+					// console.log(data)
+					getBlogPageHelper(data).then(res=>{
+						// 下面就是保存得到的数据
+						this.$store.dispatch("saveNowPage",res.data.pageNum);
+						this.$store.dispatch("saveTotalPage",res.data.totalPages);
+						this.$store.dispatch("addBlog",res.data.content);
+						
+					}).catch(error=>{
+						
+					})
+				}else{
+					console.log("加载更多")
+					//当查找的文字不为空的时候
+					if(this.haveMove==true){
+						this.espageNum+=this.espageSize;
+						let data={};
+						data.pageNum=this.espageNum;
+						data.pageSize=this.espageSize;
+						data.esString=this.search;
+						esclientrequest(JSON.stringify(data)).then(res=>{
+							
+							this.$store.dispatch("saveNowPage",this.espageNum);
+							//this.$store.dispatch("saveTotalPage",res.data.totalPages);
+							this.$store.dispatch("addBlog",res.data.data);
+							if(res.data.data.length==0){
+								this.haveMove=false;
+							}
+						})
+					}
 					
-				})
-			},
-			goclassfiy(classfiyid){
-				//这里要处理他们选中的classfiy每点击下就是重新加载新的数据
-				// 先删除所有的数据
-				// 然后用getBlogPageHelper按条件查找一次
-				console.log("现在的分类的id是"+classfiyid);
-				this.nowclassfiy=classfiyid;
-			},
-			gotag(tagid){
-				//这里是要使用tagid每点击下就是重新加载新的数据
-				console.log("现在点击的tagid"+tagid)
-				this.nowtag=tagid;
+				}
 			},
 			getnext(){
-				console.log("获取更多")
-				console.log(this.usertotalpages)
-				console.log(this.userpageNum)
-				
 				if(this.userpageNum==this.usertotalpages){
 					return;
 				}
@@ -296,10 +252,6 @@
 				})
 			},
 			getbefault(){
-				console.log("上一页")
-				console.log(this.usertotalpages)
-				console.log(this.userpageNum)
-				
 				if(this.userpageNum==1){
 					return;
 				}
@@ -315,12 +267,27 @@
 					
 				})
 			},
-			// 点击全部的时候是这里
-			categorpAll(){
-				this.nowclassfiy=-1;
-			},
-			tagAll(){
-				this.nowtag=-1;
+			searchblog(){
+				let data={};
+				this.$store.state.blogs=[];
+				this.haveMove=true;
+				this.espageNum=1;
+				this.espageSize=6;
+				data.pageNum=this.espageNum;
+				data.pageSize=this.espageSize;
+				data.esString=this.search;
+				esclientrequest(JSON.stringify(data)).then(res=>{
+					if(res.data.data.length==0){
+						this.haveMove=false;
+						return;
+					}
+					for(let i=0;i<res.data.data.length;i++){
+						res.data.data[i].createtime=(new Date(res.data.data[0].createtime)+"").substr(11,20);
+					}
+					this.$store.dispatch("saveNowPage",this.espageNum);
+					//this.$store.dispatch("saveTotalPage",res.data.totalPages);
+					this.$store.dispatch("addBlog",res.data.data);
+				})
 			}
 		}
 	}

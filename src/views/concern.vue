@@ -67,6 +67,7 @@
 			userconerntuser
 		},
 		created() {
+			let loadingInstance=this.$loading({})
 			// 由于刷新不知道怎么数据就没有了做一个保险吧
 			// 这里是获取用户喜欢的blogid
 			let user=JSON.parse(window.localStorage.getItem("remembermeUser"))||{};
@@ -92,6 +93,7 @@
 				userlikescontent.userlikesblogid=this.userlikeblogid;
 				getuserlikesandcontent(JSON.stringify(userlikescontent)).then(res=>{
 					this.blogs=res.data.data;
+					loadingInstance.close();
 				}).catch(error=>{
 					
 				})

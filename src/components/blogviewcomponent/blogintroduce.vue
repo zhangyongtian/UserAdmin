@@ -11,7 +11,7 @@
 						<h3 style="margin-left: 10px;">{{blog.useryonghu.username}}</h3>
 					</div>
 					<div style="flex: 1;">
-						<h6>{{blog.createtime|dateFilter}}</h6>
+						<h6>{{blog.createtime}}</h6>
 					</div>
 				</div>
 			</div>
@@ -39,8 +39,8 @@
 				<div class="blogintroduce_content_r">
 					<div class="blogintroduce_content_r_t">
 						<div class="blogintroduce_content_r_t_l">
-							<h2 style="text-align: left;">
-								{{blog.title}}
+							<h2 style="text-align: left;" v-html="blog.title">
+								<!-- {{blog.title}} -->
 							</h2>
 						</div>
 						<div class="blogintroduce_content_r_t_r">
@@ -48,8 +48,8 @@
 						</div>
 					</div>
 					<div class="blogintroduce_content_r_c">
-						<p style="text-align: left;text-indent: 2em;">
-							{{blog.introduce}}
+						<p style="text-align: left;text-indent: 2em;" v-html="blog.introduce">
+							<!-- //{{blog.introduce}} -->
 						</p>
 					</div>
 					<div class="blogintroduce_content_r_b" style="text-align: right;">
