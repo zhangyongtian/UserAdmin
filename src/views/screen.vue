@@ -68,7 +68,7 @@
 			return {
 				BlogClassfiy:[],
 				BlogTags:[],
-				nowclassfiy:1,
+				nowclassfiy:3,
 				nowtag:-1,
 				blogs:[],
 				pageNum:1,

@@ -92,6 +92,14 @@
 				this.$router.push({ path: `/blogdetail/${blogid}/${item}` })
 			},
 			zang(){
+				if(this.$store.state.user.createtime==undefined){
+					this.$message({
+					message: '请先登录才能够评论哦',
+						type: 'error'
+					});
+					return;
+				}
+				
 				this.thumbsUp=!this.thumbsUp;
 				
 				if(this.thumbsUp){

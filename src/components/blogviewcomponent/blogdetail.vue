@@ -193,6 +193,15 @@
 		},
 		methods:{
 			savecomment(userid,blogid){
+				console.log("顶级了我")
+				console.log(this.$store.state.user.createtime)
+				if(this.$store.state.user.createtime==undefined){
+					this.$message({
+					message: '请先登录才能够评论哦',
+						type: 'error'
+					});
+					return;
+				}
 				let parentComent={};
 				parentComent.userid=userid;
 				parentComent.blogid=blogid;

@@ -268,6 +268,7 @@
 				})
 			},
 			searchblog(){
+				let loadingInstance=this.$loading({})
 				let data={};
 				this.$store.state.blogs=[];
 				this.haveMove=true;
@@ -277,13 +278,18 @@
 				data.pageSize=this.espageSize;
 				data.esString=this.search;
 				esclientrequest(JSON.stringify(data)).then(res=>{
+					res.data.data=res.data.data.filter(temp=>{
+						return temp.isfabu;
+					})
 					if(res.data.data.length==0){
 						this.haveMove=false;
+						loadingInstance.close();
 						return;
 					}
 					for(let i=0;i<res.data.data.length;i++){
 						res.data.data[i].createtime=(new Date(res.data.data[0].createtime)+"").substr(11,20);
 					}
+					loadingInstance.close();
 					this.$store.dispatch("saveNowPage",this.espageNum);
 					//this.$store.dispatch("saveTotalPage",res.data.totalPages);
 					this.$store.dispatch("addBlog",res.data.data);

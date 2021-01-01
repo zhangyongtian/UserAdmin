@@ -71,7 +71,6 @@
 
 <style lang="less">
 	.head_left_menu{
-		margin-top: 100px;
 		min-width: 150px;
 		.login_img{
 			width: 80%;

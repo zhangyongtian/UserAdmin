@@ -176,6 +176,13 @@
 				this.textarea+="#@"+username+"&";
 			},
 			commit(userid,parentcommentid){
+				if(this.$store.state.user.createtime==undefined){
+					this.$message({
+					message: '请先登录才能够评论哦',
+						type: 'error'
+					});
+					return;
+				}
 				this.loading=true;
 				let comment={};
 				comment.parentid=parentcommentid;
@@ -186,15 +193,22 @@
 				comment.comment=this.textareatemp;
 				savesoncomment(JSON.stringify(comment)).then(res=>{
 					this.loading=false;
-					this.$message({
-					message: '恭喜你，评论成功',
-						type: 'success'
-					});
-					showsoncomment(JSON.stringify(comment)).then(res=>{
-						this.soncomment=res.data.data
-					}).catch(error=>{
-						console.log("显示子评论错误")
-					})
+					if(res.data.status==500){
+						this.$message({
+						message: '请先注册登录才可以发布评论哦',
+							type: 'error'
+						});
+					}else{
+						this.$message({
+						message: '恭喜你，评论成功',
+							type: 'success'
+						});
+						showsoncomment(JSON.stringify(comment)).then(res=>{
+							this.soncomment=res.data.data
+						}).catch(error=>{
+							console.log("显示子评论错误")
+						})
+					}
 				}).catch(error=>{
 					console.log(error)
 				})
